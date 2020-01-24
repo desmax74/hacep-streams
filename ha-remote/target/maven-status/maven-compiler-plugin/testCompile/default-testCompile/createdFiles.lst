@@ -1,8 +1,0 @@
-org/kie/remote/CommonConfigTest.class
-org/kie/remote/DroolsExecutorTest.class
-org/kie/remote/DroolsExecutorTest$DummyRunnable.class
-org/kie/remote/command/SerializableCommandConstructorTest.class
-org/kie/remote/command/SerializableCommandConstructorTest$1.class
-org/kie/remote/impl/RemoteFactHandleTest.class
-org/kie/remote/DroolsExecutorTest$1.class
-org/kie/remote/command/SerializableMessageConstructorTest.class

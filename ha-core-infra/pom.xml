@@ -53,7 +53,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka_2.12</artifactId>
+      <artifactId>kafka_2.13</artifactId>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -64,7 +64,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka_2.12</artifactId>
+      <artifactId>kafka_2.13</artifactId>
       <classifier>test</classifier>
       <scope>test</scope>
     </dependency>
