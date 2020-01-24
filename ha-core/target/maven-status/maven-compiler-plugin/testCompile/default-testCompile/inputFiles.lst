@@ -1,0 +1,14 @@
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/ConfigTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/core/GlobalStatusTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/util/GavUtilsTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/consumer/BidirectionalMapTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/consumer/FactHandlesManagerTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/exceptions/ExceptionsTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/core/infra/SnapshotInfosTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/consumer/KieContainerUtilsTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/UpdatableKieSessionTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/EnvConfigTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/consumer/ConsumerUtilsCoreTest.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/sample/kjar/Result.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/sample/kjar/StockTickEvent.java
+/data/drools_w/drools-4974/openshift-drools-hacep/ha-core/src/test/java/org/kie/hacep/consumer/CommandHandlerTest.java

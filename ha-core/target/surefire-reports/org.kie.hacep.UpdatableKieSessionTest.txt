@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.kie.hacep.UpdatableKieSessionTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.009 s - in org.kie.hacep.UpdatableKieSessionTest

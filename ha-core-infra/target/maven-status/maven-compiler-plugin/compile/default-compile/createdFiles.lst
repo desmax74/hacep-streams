@@ -1,0 +1,17 @@
+org/kie/hacep/core/infra/election/ConfigMapLockUtils.class
+org/kie/hacep/core/InfraFactory.class
+org/kie/hacep/core/infra/consumer/DefaultKafkaConsumer$PolledTopic.class
+org/kie/hacep/core/Bootstrap.class
+org/kie/hacep/core/infra/message/SnapshotMessage.class
+org/kie/remote/impl/producer/EventProducer.class
+org/kie/hacep/core/infra/election/LeaderElectionImpl$1.class
+org/kie/hacep/core/infra/consumer/DefaultKafkaConsumer.class
+org/kie/hacep/core/CoreKube.class
+org/kie/hacep/core/infra/utils/SnapshotOnDemandUtilsImpl.class
+org/kie/hacep/core/infra/election/KubernetesLockConfiguration.class
+org/kie/hacep/core/infra/utils/ConsumerUtilsCoreImpl.class
+org/kie/hacep/core/infra/DefaultSessionSnapShooter.class
+org/kie/hacep/core/infra/election/LeaderElection.class
+org/kie/hacep/core/infra/election/LeaderElectionImpl.class
+org/kie/hacep/core/infra/election/LeaderInfo.class
+org/kie/remote/impl/consumer/KafkaListenerThread.class
