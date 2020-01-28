@@ -34,6 +34,7 @@
     <module>ha-remote</module>
     <module>ha-core</module>
     <module>ha-core-infra</module>
+    <module>streams</module>
     <module>springboot</module>
     <module>jdkhttp</module>
     <module>sample-hacep-project</module>
