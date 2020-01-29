@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.hacep;
+package org.kie;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,16 +21,10 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServer;
@@ -39,29 +33,24 @@ import kafka.utils.TestUtils;
 import kafka.zk.EmbeddedZookeeper;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.SystemTime;
 import org.apache.kafka.common.utils.Time;
-import org.kie.hacep.core.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KafkaUtilTest implements AutoCloseable {
+public class KafkaStreamsUtils implements AutoCloseable {
 
     private static final String ZOOKEEPER_HOST = "127.0.0.1";
     private static final String BROKER_HOST = "127.0.0.1";
     private static final String BROKER_PORT = "9092";
-    private final static Logger logger = LoggerFactory.getLogger(KafkaUtilTest.class);
+    private final static Logger logger = LoggerFactory.getLogger(KafkaStreamsUtils.class);
     private KafkaServer kafkaServer;
     private EmbeddedZookeeper zkServer;
     private String tmpDir;
     private KafkaAdminClient adminClient;
     private Logger kafkaLogger = LoggerFactory.getLogger("org.hacep");
-
 
     public Map<String, Object> getKafkaProps() {
         Map<String, Object> props = new HashMap<>();
@@ -75,9 +64,9 @@ public class KafkaUtilTest implements AutoCloseable {
         return props;
     }
 
-
     public KafkaServer startServer() throws IOException {
-        tmpDir = Files.createTempDirectory(Paths.get(System.getProperty("user.dir"), File.separator, "target"),
+        tmpDir = Files.createTempDirectory(Paths.get(System.getProperty("user.dir"),
+                                                     File.separator, "target"),
                                            "kafkatest-").toAbsolutePath().toString();
         zkServer = new EmbeddedZookeeper();
         String zkConnect = ZOOKEEPER_HOST + ":" + zkServer.port();
@@ -87,17 +76,17 @@ public class KafkaUtilTest implements AutoCloseable {
         brokerProps.setProperty("log.dirs", tmpDir);
         brokerProps.setProperty("listeners", "PLAINTEXT://" + BROKER_HOST + ":" + BROKER_PORT);
         brokerProps.setProperty("offsets.topic.replication.factor", "1");
-        brokerProps.setProperty("auto.create.topics.enable","true");
+        brokerProps.setProperty("auto.create.topics.enable", "true");
         KafkaConfig config = new KafkaConfig(brokerProps);
         Time mock = new SystemTime();
         kafkaServer = TestUtils.createServer(config, mock);
-        Map<String, Object>  props = getKafkaProps();
+        Map<String, Object> props = getKafkaProps();
         adminClient = (KafkaAdminClient) AdminClient.create(props);
         return kafkaServer;
     }
 
     public void shutdownServer() {
-        if(adminClient != null) {
+        if (adminClient != null) {
             adminClient.close();
         }
         logger.warn("Shutdown kafka server");
@@ -131,7 +120,8 @@ public class KafkaUtilTest implements AutoCloseable {
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(tmp.getParent())) {
             for (Path path : directoryStream) {
                 if (path.toString().startsWith("kafkatest-")) {
-                    logger.warn("Deleting kafkatest folder:{}", path.toString());
+                    logger.warn("Deleting kafkatest folder:{}",
+                                path.toString());
                     Files.walk(path).
                             sorted(Comparator.reverseOrder()).
                             map(Path::toFile).
@@ -146,68 +136,6 @@ public class KafkaUtilTest implements AutoCloseable {
 
     @Override
     public void close() {
-        shutdownServer();
-    }
-
-    public <K, V> void sendSingleMsg(KafkaProducer<K, V> producer,
-                                     ProducerRecord<K, V> data) {
-        producer.send(data);
-        producer.close();
-    }
-
-    private Properties getConsumerConfig() {
-        Properties consumerProps = new Properties();
-        consumerProps.setProperty("bootstrap.servers", BROKER_HOST + ":" + BROKER_PORT);
-        consumerProps.setProperty("group.id", "group0");
-        consumerProps.setProperty("client.id", "consumer0");
-        consumerProps.put("auto.offset.reset", "earliest");
-        consumerProps.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        return consumerProps;
-    }
-
-    private Properties getProducerConfig() {
-        Properties producerProps = new Properties();
-        producerProps.setProperty("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        producerProps.setProperty("bootstrap.servers", BROKER_HOST + ":" + BROKER_PORT);
-        return producerProps;
-    }
-
-
-    public <K, V> KafkaConsumer<K, V> getStringConsumer(String topic) {
-        Properties consumerProps = getConsumerConfig();
-        consumerProps.setProperty("value.deserializer",
-                                  "org.apache.kafka.common.serialization.StringDeserializer");
-        KafkaConsumer<K, V> consumer = new KafkaConsumer<>(consumerProps);
-        consumer.subscribe(Arrays.asList(topic));
-        return consumer;
-    }
-
-
-    public <K, V> KafkaConsumer<K, V> getByteArrayConsumer(String topic) {
-        Properties consumerProps = getConsumerConfig();
-        consumerProps.setProperty("value.deserializer",
-                                  "org.apache.kafka.common.serialization.ByteArrayDeserializer");
-        KafkaConsumer<K, V> consumer = new KafkaConsumer<>(consumerProps);
-        consumer.subscribe(Arrays.asList(topic));
-        return consumer;
-    }
-
-    public <K, V> KafkaProducer<K, V> getByteArrayProducer() {
-        Properties producerProps = getProducerConfig();
-        producerProps.setProperty("value.serializer",
-                                  "org.apache.kafka.common.serialization.ByteArraySerializer");
-        return new KafkaProducer<>(producerProps);
-    }
-
-
-    public void tearDown() {
-        kafkaLogger.warn("tearDown");
-        try {
-            Bootstrap.stopEngine();
-        } catch (ConcurrentModificationException ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
-        }
-        kafkaLogger.warn("shutdownServer");
         shutdownServer();
     }
 }

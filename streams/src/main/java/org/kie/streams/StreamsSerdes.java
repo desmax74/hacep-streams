@@ -35,8 +35,6 @@ public class StreamsSerdes {
         }
     }
 
-
-
     private static class WrapperSerde<T> implements Serde<T> {
 
         private Serializer<T> serializer;

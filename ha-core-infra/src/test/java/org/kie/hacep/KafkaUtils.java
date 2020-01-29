@@ -170,14 +170,6 @@ public class KafkaUtils implements AutoCloseable {
         return consumerProps;
     }
 
-    private Properties getProducerConfig() {
-        Properties producerProps = new Properties();
-        producerProps.setProperty("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        producerProps.setProperty("bootstrap.servers", BROKER_HOST + ":" + BROKER_PORT);
-        return producerProps;
-    }
-
-
     public <K, V> KafkaConsumer<K, V> getStringConsumer(String topic) {
         Properties consumerProps = getConsumerConfig();
         consumerProps.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
