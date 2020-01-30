@@ -7,8 +7,8 @@ import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.kie.hacep.core.KieSessionContext;
 import org.kie.remote.message.Message;
-import org.kie.streams.accumulator.MessageAccumulator;
 
+/** Its purpose is to save state */
 public class MessageTransformer implements ValueTransformer<Message, MessageAccumulator> {
 
     private KeyValueStore<String, KieSessionContext> stateStore;

@@ -22,7 +22,9 @@ import org.apache.kafka.common.serialization.Serde;
 
 import org.apache.kafka.common.serialization.Serializer;
 import org.kie.remote.message.ControlMessage;
-
+/**
+ * Every Serde is an Object to serialize and deserialize Kafka's records
+ * */
 public class StreamsSerdes {
 
     public static Serde<ControlMessage> MessagePatternSerde() {
