@@ -35,12 +35,12 @@ public class KafkaTest {
 
     private final String TEST_KAFKA_LOGGER_TOPIC = "testlogs";
     private final String TEST_TOPIC = "test";
-    private KafkaUtilTest kafkaServerTest;
+    private KafkaUtils kafkaServerTest;
     private Logger kafkaLogger = LoggerFactory.getLogger("org.hacep");
 
     @Before
     public void setUp() throws Exception {
-        kafkaServerTest = new KafkaUtilTest();
+        kafkaServerTest = new KafkaUtils();
         kafkaServerTest.startServer();
     }
 
