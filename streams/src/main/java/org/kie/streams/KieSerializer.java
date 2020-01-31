@@ -35,7 +35,6 @@ public class KieSerializer<T> implements Serializer<T> {
     @Override
     public byte[] serialize(String topic, T t) {
         byte[] serializedBytes = null;
-
         try {
             serializedBytes = objectMapper.writeValueAsBytes(t);
         } catch (Exception e) {

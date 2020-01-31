@@ -61,8 +61,7 @@ public class CommonConfig {
 
   public static Properties getTestProperties() {
     Properties props = new Properties();
-    props.put(LOCAL_MESSAGE_SYSTEM_CONF,
-              true);
+    props.put(LOCAL_MESSAGE_SYSTEM_CONF, true);
     return props;
   }
 
