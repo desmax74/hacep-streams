@@ -40,6 +40,17 @@
 <!-- Kafka Tests-->
     <dependency>
       <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-streams</artifactId>
+      <scope>test</scope>
+      <classifier>test</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
       <artifactId>kafka_2.13</artifactId>
       <scope>test</scope>
       <exclusions>

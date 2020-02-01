@@ -125,6 +125,22 @@
         <classifier>test</classifier>
       </dependency>
       <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-streams</artifactId>
+        <version>${version.org.apache.kafka}</version>
+        <scope>test</scope>
+        <classifier>test</classifier>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>${version.org.hamcrest}</version>
+        <scope>test</scope>
+      </dependency>
+
+
+      <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
         <version>${version.com.fasterxml.jackson.databind}</version>

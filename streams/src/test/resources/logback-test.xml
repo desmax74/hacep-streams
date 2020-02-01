@@ -18,7 +18,7 @@
     <appender-ref ref="STDOUT"/>
   </logger>
 
-  <logger name="org.apache.kafka" level="off" additivity="false">
+  <logger name="org.apache.kafka" level="info" additivity="false">
     <appender-ref ref="STDOUT"/>
   </logger>
   <logger name="org.apache.zookeeper" level="off" additivity="false">
