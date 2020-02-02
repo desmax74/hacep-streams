@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie;
+package org.kie.streams.topology;
 
-import org.junit.After;
-import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.Topology;
 
 
-public class KafkaTest {
+public class KieTopology {
 
-    private KafkaUtilTest kafkaServerTest;
-    private Logger kafkaLogger = LoggerFactory.getLogger("org.hacep");
+    public static Topology build() {
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
 
-    @Before
-    public void setUp() throws Exception {
-        kafkaServerTest = new KafkaUtilTest();
-        kafkaServerTest.startServer();
-    }
+        // add the nodes of the topology
 
-    @After
-    public void tearDown() {
-        kafkaServerTest.shutdownServer();
+        return streamsBuilder.build();
     }
 }

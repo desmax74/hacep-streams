@@ -131,7 +131,20 @@
         <scope>test</scope>
         <classifier>test</classifier>
       </dependency>
-
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-streams-test-utils</artifactId>
+        <version>${version.org.apache.kafka}</version>
+        <scope>test</scope>
+        <classifier>test</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-streams-scala_2.13</artifactId>
+        <version>${version.org.apache.kafka}</version>
+        <scope>test</scope>
+        <classifier>test</classifier>
+      </dependency>
       <dependency>
         <groupId>org.hamcrest</groupId>
         <artifactId>hamcrest-core</artifactId>
