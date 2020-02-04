@@ -40,7 +40,12 @@ public class SnapshotInfos {
                        String kjarGAV) {
     this.kieSession = kieSession;
     this.kieContainer = kieContainer;
-    this.fhManager = fhManager.initFromKieSession(kieSession);
+    if(fhManager == null || fhManager.getFhMapKeys().isEmpty()){
+      this.fhManager = new FactHandlesManager();
+      this.fhManager.initFromKieSession(kieSession);
+    }else {
+      this.fhManager = fhManager.initFromKieSession(kieSession);
+    }
     this.keyDuringSnaphot = keyDuringSnaphot;
     this.offsetDuringSnapshot = offsetDuringSnapshot;
     this.time = time;
@@ -75,4 +80,17 @@ public class SnapshotInfos {
     return kJarGAV;
   }
 
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("SnapshotInfos{");
+    sb.append("kieSession=").append(kieSession);
+    sb.append(", kieContainer=").append(kieContainer);
+    sb.append(", fhManager=").append(fhManager);
+    sb.append(", keyDuringSnaphot='").append(keyDuringSnaphot).append('\'');
+    sb.append(", offsetDuringSnapshot=").append(offsetDuringSnapshot);
+    sb.append(", time=").append(time);
+    sb.append(", kJarGAV='").append(kJarGAV).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 }
