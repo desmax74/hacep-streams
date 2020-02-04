@@ -312,7 +312,6 @@ public class DefaultKafkaConsumer<T> implements EventConsumer {
     }
 
     protected void assignAndStartConsume() {
-        logger.info("assignAndStartConsume");
         assign();
         startConsume();
     }
