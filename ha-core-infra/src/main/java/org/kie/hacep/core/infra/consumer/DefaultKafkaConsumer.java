@@ -116,7 +116,6 @@ public class DefaultKafkaConsumer<T> implements EventConsumer {
         } else {
             kafkaSecondaryConsumer = null;
         }
-        logger.info("restartConsumer");
         assign();
     }
 
