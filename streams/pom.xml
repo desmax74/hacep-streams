@@ -37,7 +37,7 @@
       <scope>runtime</scope>
     </dependency>
 
-<!-- Kafka Tests-->
+    <!-- Kafka Tests-->
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-streams</artifactId>

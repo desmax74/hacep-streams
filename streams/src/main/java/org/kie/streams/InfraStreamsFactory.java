@@ -22,17 +22,19 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.ValueMapper;
 
-public class InfraStreamsFactory<K,V> {
-    
-    public KStream<K,V> getKStream(String srcTopic, Serde<K> keySerde, Serde<V> valueSerde) {
-        StreamsBuilder streamsBuilder = new StreamsBuilder();
-        return streamsBuilder.stream(srcTopic, Consumed.with(keySerde, valueSerde));
-    }
+public class InfraStreamsFactory<K, V> {
 
     public static StreamsConfig getStreamsConfig(Properties props) {
         return new StreamsConfig(props);
     }
 
+    public KStream<K, V> getKStream(String srcTopic,
+                                    Serde<K> keySerde,
+                                    Serde<V> valueSerde) {
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
+        return streamsBuilder.stream(srcTopic,
+                                     Consumed.with(keySerde,
+                                                   valueSerde));
+    }
 }

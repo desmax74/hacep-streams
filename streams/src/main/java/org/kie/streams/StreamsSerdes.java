@@ -19,26 +19,32 @@ import java.util.Map;
 
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
-
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.Serializer;
 import org.kie.remote.message.ControlMessage;
+
 /**
  * Every Serde is an Object to serialize and deserialize Kafka's records
- * */
+ */
 public class StreamsSerdes {
 
-    public static Serde<String> StringSerde(){ return new Serdes.StringSerde(); }
+    public static Serde<String> StringSerde() {
+        return new Serdes.StringSerde();
+    }
 
-    public static Serde<byte[]> ByteArraySerde(){ return new Serdes.ByteArraySerde(); }
+    public static Serde<byte[]> ByteArraySerde() {
+        return new Serdes.ByteArraySerde();
+    }
 
     public static Serde<ControlMessage> MessagePatternSerde() {
         return new ControlMessageSerde();
     }
 
     public static final class ControlMessageSerde extends WrapperSerde<ControlMessage> {
-        public ControlMessageSerde(){
-            super(new KieSerializer<>(), new KieDeserializer<>(ControlMessage.class) );
+
+        public ControlMessageSerde() {
+            super(new KieSerializer<>(),
+                  new KieDeserializer<>(ControlMessage.class));
         }
     }
 
@@ -47,7 +53,8 @@ public class StreamsSerdes {
         private Serializer<T> serializer;
         private Deserializer<T> deserializer;
 
-        public WrapperSerde(Serializer<T> serializer, Deserializer<T> deserializer) {
+        public WrapperSerde(Serializer<T> serializer,
+                            Deserializer<T> deserializer) {
             this.serializer = serializer;
             this.deserializer = deserializer;
         }
@@ -63,9 +70,12 @@ public class StreamsSerdes {
         }
 
         @Override
-        public void configure(Map<String, ?> configs, boolean isKey) { }
+        public void configure(Map<String, ?> configs,
+                              boolean isKey) {
+        }
 
         @Override
-        public void close() {}
+        public void close() {
+        }
     }
 }

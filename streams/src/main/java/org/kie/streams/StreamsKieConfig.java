@@ -22,38 +22,38 @@ import org.kie.hacep.Config;
 
 public class StreamsKieConfig {
 
-  public static String applicationID ;
-  public static String APPLICATION_ID_DEFAULT = "drools" ;
-  public static String bootstrapServerURL;
-  
-  private StreamsKieConfig(){}
+    public static String applicationID;
+    public static String APPLICATION_ID_DEFAULT = "drools";
+    public static String bootstrapServerURL;
 
-  public static StreamsKieConfig anStreamsKieConfig() {
-    return new StreamsKieConfig();
-  }
+    private StreamsKieConfig() {
+    }
 
-  public static String getApplicationID() {
-    return applicationID;
-  }
+    public static StreamsKieConfig anStreamsKieConfig() {
+        return new StreamsKieConfig();
+    }
 
-  public static String getBootstrapServerURL() {
-    return bootstrapServerURL;
-  }
+    public static String getApplicationID() {
+        return applicationID;
+    }
 
-  public StreamsKieConfig withApplicationId(String applicationID) {
-    this.applicationID = applicationID;
-    return this;
-  }
+    public static String getBootstrapServerURL() {
+        return bootstrapServerURL;
+    }
 
-  public StreamsKieConfig withBootstrapServerURL(String bootstrapServerURL) {
-    this.bootstrapServerURL = bootstrapServerURL;
-    return this;
-  }
+    public static StreamsKieConfig getDefaultStreamsKieConfig() {
+        return anStreamsKieConfig().
+                withApplicationId(Optional.ofNullable(System.getenv(StreamsConfig.APPLICATION_ID_CONFIG)).orElse(APPLICATION_ID_DEFAULT)).
+                withBootstrapServerURL(Config.getBootStrapServers());
+    }
 
-  public static StreamsKieConfig getDefaultStreamsKieConfig() {
-    return anStreamsKieConfig().
-            withApplicationId(Optional.ofNullable(System.getenv(StreamsConfig.APPLICATION_ID_CONFIG)).orElse(APPLICATION_ID_DEFAULT)).
-            withBootstrapServerURL(Config.getBootStrapServers());
-  }
+    public StreamsKieConfig withApplicationId(String applicationID) {
+        this.applicationID = applicationID;
+        return this;
+    }
 
+    public StreamsKieConfig withBootstrapServerURL(String bootstrapServerURL) {
+        this.bootstrapServerURL = bootstrapServerURL;
+        return this;
+    }
 }

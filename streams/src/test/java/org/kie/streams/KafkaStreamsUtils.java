@@ -54,32 +54,47 @@ public class KafkaStreamsUtils implements AutoCloseable {
 
     public Map<String, Object> getKafkaProps() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ProducerConfig.RETRIES_CONFIG, 0);
-        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                  "localhost:9092");
+        props.put(ProducerConfig.RETRIES_CONFIG,
+                  0);
+        props.put(ProducerConfig.BATCH_SIZE_CONFIG,
+                  16384);
+        props.put(ProducerConfig.LINGER_MS_CONFIG,
+                  1);
+        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG,
+                  33554432);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                  StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                  StringSerializer.class);
         return props;
     }
 
     public KafkaServer startServer() throws IOException {
         tmpDir = Files.createTempDirectory(Paths.get(System.getProperty("user.dir"),
-                                                     File.separator, "target"),
+                                                     File.separator,
+                                                     "target"),
                                            "kafkatest-").toAbsolutePath().toString();
         zkServer = new EmbeddedZookeeper();
         String zkConnect = ZOOKEEPER_HOST + ":" + zkServer.port();
         Properties brokerProps = new Properties();
-        brokerProps.setProperty("zookeeper.connect", zkConnect);
-        brokerProps.setProperty("broker.id", "0");
-        brokerProps.setProperty("log.dirs", tmpDir);
-        brokerProps.setProperty("listeners", "PLAINTEXT://" + BROKER_HOST + ":" + BROKER_PORT);
-        brokerProps.setProperty("offsets.topic.replication.factor", "1");
-        brokerProps.setProperty("auto.create.topics.enable", "true");
+        brokerProps.setProperty("zookeeper.connect",
+                                zkConnect);
+        brokerProps.setProperty("broker.id",
+                                "0");
+        brokerProps.setProperty("log.dirs",
+                                tmpDir);
+        brokerProps.setProperty("listeners",
+                                "PLAINTEXT://" + BROKER_HOST + ":" + BROKER_PORT);
+        brokerProps.setProperty("offsets.topic.replication.factor",
+                                "1");
+        brokerProps.setProperty("auto.create.topics.enable",
+                                "true");
         KafkaConfig config = new KafkaConfig(brokerProps);
         Time mock = new SystemTime();
-        kafkaServer = TestUtils.createServer(config, mock);
+        kafkaServer = TestUtils.createServer(config,
+                                             mock);
         Map<String, Object> props = getKafkaProps();
         adminClient = (KafkaAdminClient) AdminClient.create(props);
         return kafkaServer;
@@ -97,25 +112,29 @@ public class KafkaStreamsUtils implements AutoCloseable {
                 kafkaServer.awaitShutdown();
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage(),
+                         e);
         }
         kafkaServer = null;
 
         try {
             zkServer.shutdown();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage(),
+                         e);
         }
         zkServer = null;
 
         try {
-            logger.warn("Deleting kafka temp dir:{}", tmp.toString());
+            logger.warn("Deleting kafka temp dir:{}",
+                        tmp.toString());
             Files.walk(tmp).
                     sorted(Comparator.reverseOrder()).
                     map(Path::toFile).
                     forEach(File::delete);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage(),
+                         e);
         }
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(tmp.getParent())) {
             for (Path path : directoryStream) {

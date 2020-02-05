@@ -8,15 +8,18 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.kie.hacep.core.KieSessionContext;
 import org.kie.remote.message.Message;
 
-/** Its purpose is to save state */
+/**
+ * Its purpose is to save state
+ */
 public class MessageTransformer implements ValueTransformer<Message, MessageAccumulator> {
 
-    private KeyValueStore<String, KieSessionContext> stateStore;
     private final String storeName;
+    private KeyValueStore<String, KieSessionContext> stateStore;
     private ProcessorContext context;
 
     public MessageTransformer(String storeName) {
-        Objects.requireNonNull(storeName, "Store Name can't be null");
+        Objects.requireNonNull(storeName,
+                               "Store Name can't be null");
         this.storeName = storeName;
     }
 
@@ -34,7 +37,6 @@ public class MessageTransformer implements ValueTransformer<Message, MessageAccu
         // Decide if is best KieSession or CommandHandler to process the messages
 
         return messageAccumulator;
-
     }
 
     public MessageAccumulator punctuate(long timestamp) {

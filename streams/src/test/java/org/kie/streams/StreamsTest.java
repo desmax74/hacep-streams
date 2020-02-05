@@ -16,63 +16,60 @@
 package org.kie.streams;
 
 import java.util.Properties;
-import java.lang.String;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster;
+import org.apache.kafka.test.StreamsTestUtils;
 import org.apache.kafka.test.TestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 
-import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster;
-import org.apache.kafka.test.StreamsTestUtils;
-
 public class StreamsTest {
 
-  private KafkaStreams kafkaStreams;
-  private StreamsConfig streamsConfig;
-  private Properties producerConfig;
-  private Properties consumerConfig;
-  private Properties properties;
+    @ClassRule
+    public static final EmbeddedKafkaCluster kafka = new EmbeddedKafkaCluster(1);
+    private static final String TOPIC_ONE = "topicOne";
+    private static final String TOPIC_TWO = "topicTwo";
+    private static final String DEST_TOPIC = "out-topic";
+    private KafkaStreams kafkaStreams;
+    private StreamsConfig streamsConfig;
+    private Properties producerConfig;
+    private Properties consumerConfig;
+    private Properties properties;
 
-  private static final String TOPIC_ONE = "topicOne";
-  private static final String TOPIC_TWO = "topicTwo";
-  private static final String DEST_TOPIC = "out-topic";
-
-
-  @ClassRule
-  public static final EmbeddedKafkaCluster kafka = new EmbeddedKafkaCluster(1);
-
-  @BeforeClass
-  public static void setUpAll() throws Exception {
-    kafka.createTopic(TOPIC_ONE);
-    kafka.createTopic(TOPIC_TWO);
-    kafka.createTopic(DEST_TOPIC);
-  }
-
-
-  @Before
-  public void setUp() {
-    String stringSerdeClassName = Serdes.String().getClass().getName();
-    properties = StreamsTestUtils.getStreamsConfig("test",
-                                                   kafka.bootstrapServers(),
-                                                   stringSerdeClassName,
-                                                   stringSerdeClassName,
-                                                   new Properties());
-    producerConfig = TestUtils.producerConfig(kafka.bootstrapServers(), StringSerializer.class, StringSerializer.class);
-    consumerConfig = TestUtils.consumerConfig(kafka.bootstrapServers(), StringDeserializer.class, StringDeserializer.class);
-  }
-
-  @After
-  public void tearDown() {
-    if (kafkaStreams != null) {
-      kafkaStreams.close();
+    @BeforeClass
+    public static void setUpAll() throws Exception {
+        kafka.createTopic(TOPIC_ONE);
+        kafka.createTopic(TOPIC_TWO);
+        kafka.createTopic(DEST_TOPIC);
     }
-  }
 
+    @Before
+    public void setUp() {
+        String stringSerdeClassName = Serdes.String().getClass().getName();
+        properties = StreamsTestUtils.getStreamsConfig("test",
+                                                       kafka.bootstrapServers(),
+                                                       stringSerdeClassName,
+                                                       stringSerdeClassName,
+                                                       new Properties());
+        producerConfig = TestUtils.producerConfig(kafka.bootstrapServers(),
+                                                  StringSerializer.class,
+                                                  StringSerializer.class);
+        consumerConfig = TestUtils.consumerConfig(kafka.bootstrapServers(),
+                                                  StringDeserializer.class,
+                                                  StringDeserializer.class);
+    }
+
+    @After
+    public void tearDown() {
+        if (kafkaStreams != null) {
+            kafkaStreams.close();
+        }
+    }
 }

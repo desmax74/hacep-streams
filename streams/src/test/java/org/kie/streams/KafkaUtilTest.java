@@ -46,7 +46,6 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.SystemTime;
@@ -63,22 +62,28 @@ public class KafkaUtilTest implements AutoCloseable {
     private final static Logger logger = LoggerFactory.getLogger(KafkaUtilTest.class);
     private static Callback callback;
     private static KafkaProducer<String, String> producer;
+    private static ExecutorService executorService = Executors.newFixedThreadPool(1);
     private KafkaServer kafkaServer;
     private EmbeddedZookeeper zkServer;
     private String tmpDir;
     private KafkaAdminClient adminClient;
     private Logger kafkaLogger = LoggerFactory.getLogger("org.hacep");
-    private static ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     private static void init() {
         logger.info("Initializing the producer");
         Properties properties = new Properties();
-        properties.put("bootstrap.servers", "localhost:9092");
-        properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        properties.put("acks", "1");
-        properties.put("retries", "3");
-        properties.put(StreamsConfig.consumerPrefix(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG), Collections.singletonList(ConsumerInterceptor.class));
+        properties.put("bootstrap.servers",
+                       "localhost:9092");
+        properties.put("key.serializer",
+                       "org.apache.kafka.common.serialization.StringSerializer");
+        properties.put("value.serializer",
+                       "org.apache.kafka.common.serialization.StringSerializer");
+        properties.put("acks",
+                       "1");
+        properties.put("retries",
+                       "3");
+        properties.put(StreamsConfig.consumerPrefix(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG),
+                       Collections.singletonList(ConsumerInterceptor.class));
 
         producer = new KafkaProducer<>(properties);
 
@@ -126,13 +131,20 @@ public class KafkaUtilTest implements AutoCloseable {
 
     public Map<String, Object> getKafkaProps() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ProducerConfig.RETRIES_CONFIG, 0);
-        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                  "localhost:9092");
+        props.put(ProducerConfig.RETRIES_CONFIG,
+                  0);
+        props.put(ProducerConfig.BATCH_SIZE_CONFIG,
+                  16384);
+        props.put(ProducerConfig.LINGER_MS_CONFIG,
+                  1);
+        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG,
+                  33554432);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                  StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                  StringSerializer.class);
         return props;
     }
 
@@ -223,18 +235,24 @@ public class KafkaUtilTest implements AutoCloseable {
         shutdownServer();
     }
 
-    public <K, V> void sendSingleMsg(KafkaProducer<K, V> producer, ProducerRecord<K, V> data) {
+    public <K, V> void sendSingleMsg(KafkaProducer<K, V> producer,
+                                     ProducerRecord<K, V> data) {
         producer.send(data);
         producer.close();
     }
 
     private Properties getConsumerConfig() {
         Properties consumerProps = new Properties();
-        consumerProps.setProperty("bootstrap.servers", BROKER_HOST + ":" + BROKER_PORT);
-        consumerProps.setProperty("group.id", "group0");
-        consumerProps.setProperty("client.id", "consumer0");
-        consumerProps.put("auto.offset.reset", "earliest");
-        consumerProps.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        consumerProps.setProperty("bootstrap.servers",
+                                  BROKER_HOST + ":" + BROKER_PORT);
+        consumerProps.setProperty("group.id",
+                                  "group0");
+        consumerProps.setProperty("client.id",
+                                  "consumer0");
+        consumerProps.put("auto.offset.reset",
+                          "earliest");
+        consumerProps.setProperty("key.deserializer",
+                                  "org.apache.kafka.common.serialization.StringDeserializer");
         return consumerProps;
     }
 

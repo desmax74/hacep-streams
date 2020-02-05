@@ -17,23 +17,35 @@ package org.kie.streams.partitioner;
 
 import org.apache.kafka.clients.producer.internals.DefaultPartitioner;
 import org.apache.kafka.common.Cluster;
-/** Class to use in the configuration
+
+/**
+ * Class to use in the configuration
  * with:
  * partitioner.class=org.kie.streams.partitioner.KeyPartitioner
- *
- * if related data needs to be on the same partition */
+ * <p>
+ * if related data needs to be on the same partition
+ */
 public class KeyPartitioner extends DefaultPartitioner {
 
-  @Override
-  public int partition(String topic, Object key, byte[] keyBytes,
-                       Object value, byte[] valueBytes, Cluster cluster) {
+    @Override
+    public int partition(String topic,
+                         Object key,
+                         byte[] keyBytes,
+                         Object value,
+                         byte[] valueBytes,
+                         Cluster cluster) {
 
-    Object newKey = null;
-    if(key != null){
-      // 1)cast the key to your custom key
-      // 2)retrive the custom key and assign to the newKey
-      // 3) get bytes from newKey and assign to keyBytes
+        Object newKey = null;
+        if (key != null) {
+            // 1)cast the key to your custom key
+            // 2)retrive the custom key and assign to the newKey
+            // 3) get bytes from newKey and assign to keyBytes
+        }
+        return super.partition(topic,
+                               key,
+                               keyBytes,
+                               value,
+                               valueBytes,
+                               cluster);
     }
-    return super.partition(topic, key, keyBytes, value, valueBytes, cluster);
-  }
 }
