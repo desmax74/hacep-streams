@@ -17,26 +17,24 @@ package org.kie.streams.topology;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Produced;
 
 public class KieTopology {
 
-    /*This topology consume from events and produce on control*/
-    public static Topology buildLeaderTopology() {
+    public static StreamsBuilder leaderStreamsBuilder() {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
         streamsBuilder.stream("events", Consumed.with(Serdes.String(), Serdes.String())).
                 mapValues(s -> s.toUpperCase()).
                 to("control", Produced.with(Serdes.String(), Serdes.String()));
-        return streamsBuilder.build();
+        return streamsBuilder;
     }
 
-    public static Topology buildReplicaTopology() {
+    public static StreamsBuilder replicaStreamsBuilder() {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
         streamsBuilder.stream("control", Consumed.with(Serdes.String(), Serdes.String()))
                 .mapValues(s -> s.toUpperCase())
                 .to("control", Produced.with(Serdes.String(), Serdes.String()));
-        return streamsBuilder.build();
+        return streamsBuilder;
     }
 }

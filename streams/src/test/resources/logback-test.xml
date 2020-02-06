@@ -13,11 +13,6 @@
     </encoder>
   </appender>
 
-
-  <logger name="org.hacep" level="info" additivity="false">
-    <appender-ref ref="STDOUT"/>
-  </logger>
-
   <logger name="org.apache.kafka" level="info" additivity="false">
     <appender-ref ref="STDOUT"/>
   </logger>
