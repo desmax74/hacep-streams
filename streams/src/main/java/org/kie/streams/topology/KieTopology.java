@@ -19,21 +19,22 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.ValueMapper;
 
 public class KieTopology {
 
-    public static StreamsBuilder leaderStreamsBuilder() {
+    public static StreamsBuilder leaderStreamsBuilderDSL(ValueMapper mapper) {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
         streamsBuilder.stream("events", Consumed.with(Serdes.String(), Serdes.String())).
-                mapValues(s -> s.toUpperCase()).
+                mapValues(mapper).
                 to("control", Produced.with(Serdes.String(), Serdes.String()));
         return streamsBuilder;
     }
 
-    public static StreamsBuilder replicaStreamsBuilder() {
+    public static StreamsBuilder replicaStreamsBuilder(ValueMapper mapper) {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
         streamsBuilder.stream("control", Consumed.with(Serdes.String(), Serdes.String()))
-                .mapValues(s -> s.toUpperCase())
+                .mapValues(mapper)
                 .to("control", Produced.with(Serdes.String(), Serdes.String()));
         return streamsBuilder;
     }

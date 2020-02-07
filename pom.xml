@@ -146,10 +146,9 @@
       </dependency>
 
       <dependency>
-        <groupId>org.hamcrest</groupId>
-        <artifactId>hamcrest-core</artifactId>
-        <version>${version.org.hamcrest}</version>
-        <scope>test</scope>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${version.org.assertj}</version>
       </dependency>
 
       <dependency>
