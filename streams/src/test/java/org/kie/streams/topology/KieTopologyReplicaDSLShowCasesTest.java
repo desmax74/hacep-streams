@@ -39,12 +39,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
-public class KieTopologyShowCasesTest {
+public class KieTopologyReplicaDSLShowCasesTest {
 
-    private Logger logger = LoggerFactory.getLogger(KieTopologyShowCasesTest.class);
+    private Logger logger = LoggerFactory.getLogger(KieTopologyReplicaDSLShowCasesTest.class);
     private TopologyTestDriver driver;
     private StringSerializer stringSerializer;
     private StringDeserializer stringDeserializer;
@@ -56,12 +56,12 @@ public class KieTopologyShowCasesTest {
         Properties props = new Properties();
         props.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "drools-test");
         props.setProperty(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9091");
-        final StreamsBuilder builder = KieTopology.leaderStreamsBuilderDSL(s -> s.toString().toUpperCase());
+        final StreamsBuilder builder = KieTopology.replicaStreamsBuilder(s -> s.toString().toUpperCase());
         driver = new TopologyTestDriver(builder.build(), props);
         stringSerializer = new StringSerializer();
         stringDeserializer = new StringDeserializer();
-        inputTopic = driver.createInputTopic("events", stringSerializer, stringSerializer);
-        outputTopic = driver.createOutputTopic("control", stringDeserializer, stringDeserializer);
+        inputTopic = driver.createInputTopic("control", stringSerializer, stringSerializer);
+        outputTopic = driver.createOutputTopic("kieSessionInfos", stringDeserializer, stringDeserializer);
     }
 
     @After

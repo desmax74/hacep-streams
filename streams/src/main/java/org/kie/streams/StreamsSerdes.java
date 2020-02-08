@@ -41,10 +41,8 @@ public class StreamsSerdes {
     }
 
     public static final class ControlMessageSerde extends WrapperSerde<ControlMessage> {
-
         public ControlMessageSerde() {
-            super(new KieSerializer<>(),
-                  new KieDeserializer<>(ControlMessage.class));
+            super(new KieSerializer<>(), new KieDeserializer<>(ControlMessage.class));
         }
     }
 
@@ -53,8 +51,7 @@ public class StreamsSerdes {
         private Serializer<T> serializer;
         private Deserializer<T> deserializer;
 
-        public WrapperSerde(Serializer<T> serializer,
-                            Deserializer<T> deserializer) {
+        public WrapperSerde(Serializer<T> serializer, Deserializer<T> deserializer) {
             this.serializer = serializer;
             this.deserializer = deserializer;
         }
@@ -70,12 +67,13 @@ public class StreamsSerdes {
         }
 
         @Override
-        public void configure(Map<String, ?> configs,
-                              boolean isKey) {
+        public void configure(Map<String, ?> configs, boolean isKey) {
+            //no op
         }
 
         @Override
         public void close() {
+            //no op
         }
     }
 }

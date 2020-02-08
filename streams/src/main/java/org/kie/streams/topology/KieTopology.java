@@ -35,7 +35,7 @@ public class KieTopology {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
         streamsBuilder.stream("control", Consumed.with(Serdes.String(), Serdes.String()))
                 .mapValues(mapper)
-                .to("control", Produced.with(Serdes.String(), Serdes.String()));
+                .to("kieSessionInfos", Produced.with(Serdes.String(), Serdes.String()));
         return streamsBuilder;
     }
 }

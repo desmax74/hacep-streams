@@ -15,42 +15,42 @@
  */
 package org.kie.streams.tables;
 
-import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.state.KeyValueStore;
 
-public class KieTableFactory<K, V> {
+public class KieTableFactory {
 
-  public KTable<K,V> createTable(final String topic){
+  private KieTableFactory(){};
+
+  public static KTable createTable(final String topic){
     StreamsBuilder streamsBuilder = new StreamsBuilder();
     return streamsBuilder.table(topic);
   }
 
-  public KTable<K,V> createTable(final String topic, final Consumed<K,V> consumed){
+  public static KTable createTable(final String topic, final Consumed consumed){
     StreamsBuilder streamsBuilder = new StreamsBuilder();
     return streamsBuilder.table(topic, consumed);
   }
 
-  public KTable<K,V> createTable(final String topic, final Consumed<K, V> consumed, final Materialized<K, V, KeyValueStore<Bytes, byte[]>> materialized){
+  public static KTable createTable(final String topic, final Consumed consumed, final Materialized materialized){
     StreamsBuilder streamsBuilder = new StreamsBuilder();
     return streamsBuilder.table(topic, consumed, materialized);
   }
 
-  public GlobalKTable<K,V> createGlobalTable(final String topic){
+  public static GlobalKTable createGlobalTable(final String topic){
     StreamsBuilder streamsBuilder = new StreamsBuilder();
     return streamsBuilder.globalTable(topic);
   }
 
-  public GlobalKTable<K,V> createGlobalTable(final String topic, final Consumed<K,V> consumed){
+  public static GlobalKTable createGlobalTable(final String topic, final Consumed consumed){
     StreamsBuilder streamsBuilder = new StreamsBuilder();
     return streamsBuilder.globalTable(topic, consumed);
   }
 
-  public GlobalKTable<K,V> createGlobalTable(final String topic, final Consumed<K, V> consumed, final Materialized<K, V, KeyValueStore<Bytes, byte[]>> materialized){
+  public static GlobalKTable createGlobalTable(final String topic, final Consumed consumed, final Materialized materialized){
     StreamsBuilder streamsBuilder = new StreamsBuilder();
     return streamsBuilder.globalTable(topic, consumed, materialized);
   }

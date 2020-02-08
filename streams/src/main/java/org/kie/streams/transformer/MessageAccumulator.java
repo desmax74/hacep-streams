@@ -26,15 +26,13 @@ public class MessageAccumulator {
 
     private CommandHandler commandHandler;
 
-    public MessageAccumulator() {
-    }
+    public MessageAccumulator() {}
 
     public MessageAccumulator(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
     }
 
-    public void process(RemoteCommand command,
-                        State state) {
+    public void process(RemoteCommand command, State state) {
         //Think about move the visitor here
         boolean execute = state.equals(State.LEADER) || command.isPermittedForReplicas();
         if (execute) {
@@ -43,8 +41,7 @@ public class MessageAccumulator {
                 visitable.accept(commandHandler);
             } catch (Exception e) {
                 GlobalStatus.setNodeLive(false);
-                throw new ProcessCommandException(e.getMessage(),
-                                                  e.getCause());
+                throw new ProcessCommandException(e.getMessage(), e.getCause());
             }
         }
     }
