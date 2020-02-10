@@ -29,12 +29,8 @@ public class InfraStreamsFactory<K, V> {
         return new StreamsConfig(props);
     }
 
-    public KStream<K, V> getKStream(String srcTopic,
-                                    Serde<K> keySerde,
-                                    Serde<V> valueSerde) {
+    public KStream<K, V> getKStream(String srcTopic, Serde<K> keySerde, Serde<V> valueSerde) {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        return streamsBuilder.stream(srcTopic,
-                                     Consumed.with(keySerde,
-                                                   valueSerde));
+        return streamsBuilder.stream(srcTopic, Consumed.with(keySerde, valueSerde));
     }
 }

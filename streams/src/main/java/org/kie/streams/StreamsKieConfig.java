@@ -22,22 +22,21 @@ import org.kie.hacep.Config;
 
 public class StreamsKieConfig {
 
-    public static String applicationID;
+    private String applicationID;
     public static String APPLICATION_ID_DEFAULT = "drools";
-    public static String bootstrapServerURL;
+    private String bootstrapServerURL;
 
-    private StreamsKieConfig() {
-    }
+    private StreamsKieConfig() { }
 
     public static StreamsKieConfig anStreamsKieConfig() {
         return new StreamsKieConfig();
     }
 
-    public static String getApplicationID() {
+    public String getApplicationID() {
         return applicationID;
     }
 
-    public static String getBootstrapServerURL() {
+    public String getBootstrapServerURL() {
         return bootstrapServerURL;
     }
 

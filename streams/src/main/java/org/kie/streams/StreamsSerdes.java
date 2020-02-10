@@ -28,18 +28,6 @@ import org.kie.remote.message.ControlMessage;
  */
 public class StreamsSerdes {
 
-    public static Serde<String> StringSerde() {
-        return new Serdes.StringSerde();
-    }
-
-    public static Serde<byte[]> ByteArraySerde() {
-        return new Serdes.ByteArraySerde();
-    }
-
-    public static Serde<ControlMessage> MessagePatternSerde() {
-        return new ControlMessageSerde();
-    }
-
     public static final class ControlMessageSerde extends WrapperSerde<ControlMessage> {
         public ControlMessageSerde() {
             super(new KieSerializer<>(), new KieDeserializer<>(ControlMessage.class));
@@ -67,13 +55,9 @@ public class StreamsSerdes {
         }
 
         @Override
-        public void configure(Map<String, ?> configs, boolean isKey) {
-            //no op
-        }
+        public void configure(Map<String, ?> configs, boolean isKey) {/*no op*/}
 
         @Override
-        public void close() {
-            //no op
-        }
+        public void close() {/*no op*/}
     }
 }

@@ -28,12 +28,7 @@ import org.apache.kafka.common.Cluster;
 public class KeyPartitioner extends DefaultPartitioner {
 
     @Override
-    public int partition(String topic,
-                         Object key,
-                         byte[] keyBytes,
-                         Object value,
-                         byte[] valueBytes,
-                         Cluster cluster) {
+    public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
 
         Object newKey = null;
         if (key != null) {
@@ -41,11 +36,6 @@ public class KeyPartitioner extends DefaultPartitioner {
             // 2)retrive the custom key and assign to the newKey
             // 3) get bytes from newKey and assign to keyBytes
         }
-        return super.partition(topic,
-                               key,
-                               keyBytes,
-                               value,
-                               valueBytes,
-                               cluster);
+        return super.partition(topic, key, keyBytes, value, valueBytes, cluster);
     }
 }
