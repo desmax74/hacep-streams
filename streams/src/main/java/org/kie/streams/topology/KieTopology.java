@@ -15,27 +15,58 @@
  */
 package org.kie.streams.topology;
 
+import org.apache.kafka.common.serialization.Deserializer;
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.ValueMapper;
+import org.apache.kafka.streams.processor.FailOnInvalidTimestamp;
+import org.kie.streams.processor.KieLeaderProcessor;
+import org.kie.streams.processor.KieReplicaProcessor;
 
 public class KieTopology {
 
+    private static Serde<String> stringSerde = Serdes.String();
+    private static Deserializer<String> stringDeserializer = stringSerde.deserializer();
+    private static String TOPIC_CONTROL = "control";
+    private static String TOPIC_EVENTS = "events";
+    private static KieLeaderProcessor kieLeaderProcessor = new KieLeaderProcessor();
+    private static KieReplicaProcessor kieReplicaProcessor = new KieReplicaProcessor();
+
     public static StreamsBuilder leaderStreamsBuilderDSL(ValueMapper mapper) {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        streamsBuilder.stream("events", Consumed.with(Serdes.String(), Serdes.String())).
+        streamsBuilder.stream(TOPIC_EVENTS, Consumed.with(Serdes.String(), Serdes.String())).
                 mapValues(mapper).
-                to("control", Produced.with(Serdes.String(), Serdes.String()));
+                to(TOPIC_CONTROL, Produced.with(Serdes.String(), Serdes.String()));
         return streamsBuilder;
     }
 
     public static StreamsBuilder replicaStreamsBuilder(ValueMapper mapper) {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        streamsBuilder.stream("control", Consumed.with(Serdes.String(), Serdes.String()))
+        streamsBuilder.stream(TOPIC_CONTROL, Consumed.with(Serdes.String(), Serdes.String()))
                 .mapValues(mapper)
-                .to("kieSessionInfos", Produced.with(Serdes.String(), Serdes.String()));
+                .to("topicDestination", Produced.with(Serdes.String(), Serdes.String()));
         return streamsBuilder;
+    }
+
+    public static Topology leaderStreamsBuilderProcessors(ValueMapper mapper) {
+        Topology topology = new Topology();
+
+        topology.addSource(Topology.AutoOffsetReset.LATEST,
+                           "startNode",
+                           new FailOnInvalidTimestamp(),
+                           stringDeserializer, new StringDeserializer(),
+                           TOPIC_EVENTS)
+                .addProcessor("leaderNode",
+                              ()-> kieLeaderProcessor,
+                              "startNode")
+                .addProcessor("replicaNode",
+                              ()-> kieReplicaProcessor,
+                              "startNode");//parentNode
+        return topology;
     }
 }
