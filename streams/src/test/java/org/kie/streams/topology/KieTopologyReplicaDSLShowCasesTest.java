@@ -60,8 +60,8 @@ public class KieTopologyReplicaDSLShowCasesTest {
         driver = new TopologyTestDriver(builder.build(), props);
         stringSerializer = new StringSerializer();
         stringDeserializer = new StringDeserializer();
-        inputTopic = driver.createInputTopic("control", stringSerializer, stringSerializer);
-        outputTopic = driver.createOutputTopic("kieSessionInfos", stringDeserializer, stringDeserializer);
+        inputTopic = driver.createInputTopic(KieTopology.TOPIC_CONTROL, stringSerializer, stringSerializer);
+        outputTopic = driver.createOutputTopic(KieTopology.TOPIC_DESTINATION, stringDeserializer, stringDeserializer);
     }
 
     @After

@@ -32,8 +32,9 @@ public class KieTopology {
 
     private static Serde<String> stringSerde = Serdes.String();
     private static Deserializer<String> stringDeserializer = stringSerde.deserializer();
-    private static String TOPIC_CONTROL = "control";
-    private static String TOPIC_EVENTS = "events";
+    public static String TOPIC_CONTROL = "control";
+    public static String TOPIC_EVENTS = "events";
+    public static String TOPIC_DESTINATION = "destination";
     private static KieLeaderProcessor kieLeaderProcessor = new KieLeaderProcessor();
     private static KieReplicaProcessor kieReplicaProcessor = new KieReplicaProcessor();
 
@@ -49,7 +50,7 @@ public class KieTopology {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
         streamsBuilder.stream(TOPIC_CONTROL, Consumed.with(Serdes.String(), Serdes.String()))
                 .mapValues(mapper)
-                .to("topicDestination", Produced.with(Serdes.String(), Serdes.String()));
+                .to(TOPIC_DESTINATION, Produced.with(Serdes.String(), Serdes.String()));
         return streamsBuilder;
     }
 
