@@ -20,16 +20,18 @@ import java.util.Properties;
 
 public class ConfigurationUtil {
 
-  private ConfigurationUtil(){}
+    private ConfigurationUtil() {
+    }
 
-  public static boolean readBoolean(Properties configuration, String propName) {
-    Object value = configuration.get(propName);
-    if (value instanceof Boolean) {
-      return (Boolean) value;
+    public static boolean readBoolean(Properties configuration,
+                                      String propName) {
+        Object value = configuration.get(propName);
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        if (value instanceof String) {
+            return Boolean.valueOf((String) value);
+        }
+        return false;
     }
-    if (value instanceof String) {
-      return Boolean.valueOf((String) value);
-    }
-    return false;
-  }
 }

@@ -23,39 +23,44 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.kie.remote.message.Message;
 
 /**
- * Use this class when you want to execute an action on after a specific interval of time */
+ * Use this class when you want to execute an action on after a specific interval of time
+ */
 public class KiePunctuator implements Punctuator {
 
-  private ProcessorContext context;
-  private KeyValueStore<String, Message> keyValueStore;
-  private Object threshold;
+    private ProcessorContext context;
+    private KeyValueStore<String, Message> keyValueStore;
+    private Object threshold;
 
-  public KiePunctuator(Object threshold, ProcessorContext context, KeyValueStore<String, Message> keyValueStore) {
-    this.context = context;
-    this.keyValueStore = keyValueStore;
-  }
-
-  @Override
-  public void punctuate(long timestamp) {
-    KeyValueIterator<String, Message> performanceIterator = keyValueStore.all();
-    while (performanceIterator.hasNext()) {
-      KeyValue<String, Message> keyValue = performanceIterator.next();
-      String key = keyValue.key;
-      Message msg = keyValue.value;
-      if (msg != null) {
-          if(check(threshold)) {
-            //do check and then forward
-            context.forward(key, msg);
-          }else{
-            //change the msg
-            context.forward(key, msg);
-          }
-      }
+    public KiePunctuator(Object threshold,
+                         ProcessorContext context,
+                         KeyValueStore<String, Message> keyValueStore) {
+        this.context = context;
+        this.keyValueStore = keyValueStore;
     }
-  }
 
-  private boolean check(Object threshold){
-    //do checks and return an appropriate value
-    return true;
-  }
+    @Override
+    public void punctuate(long timestamp) {
+        KeyValueIterator<String, Message> performanceIterator = keyValueStore.all();
+        while (performanceIterator.hasNext()) {
+            KeyValue<String, Message> keyValue = performanceIterator.next();
+            String key = keyValue.key;
+            Message msg = keyValue.value;
+            if (msg != null) {
+                if (check(threshold)) {
+                    //do check and then forward
+                    context.forward(key,
+                                    msg);
+                } else {
+                    //change the msg
+                    context.forward(key,
+                                    msg);
+                }
+            }
+        }
+    }
+
+    private boolean check(Object threshold) {
+        //do checks and return an appropriate value
+        return true;
+    }
 }

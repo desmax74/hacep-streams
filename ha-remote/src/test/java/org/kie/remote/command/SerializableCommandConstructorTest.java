@@ -25,99 +25,101 @@ import static org.junit.Assert.*;
 public class SerializableCommandConstructorTest {
 
     @Test
-    public void deleteCommandDefaultTest(){
+    public void deleteCommandDefaultTest() {
         DeleteCommand command = new DeleteCommand();
         assertTrue(command.isPermittedForReplicas());
     }
 
     @Test
-    public void deleteCommandTest(){
-        DeleteCommand command = new DeleteCommand(new RemoteFactHandleImpl(new Object()), "DEFAULT");
+    public void deleteCommandTest() {
+        DeleteCommand command = new DeleteCommand(new RemoteFactHandleImpl(new Object()),
+                                                  "DEFAULT");
         assertTrue(command.isPermittedForReplicas());
         assertNotNull(command.toString());
     }
 
     @Test
-    public void eventInsertCommandDefaultTest(){
+    public void eventInsertCommandDefaultTest() {
         EventInsertCommand command = new EventInsertCommand();
         assertTrue(command.isPermittedForReplicas());
     }
 
     @Test
-    public void eventInsertCommandTest(){
-        EventInsertCommand command = new EventInsertCommand(new RemoteFactHandleImpl(new Object()), "DEFAULT");
+    public void eventInsertCommandTest() {
+        EventInsertCommand command = new EventInsertCommand(new RemoteFactHandleImpl(new Object()),
+                                                            "DEFAULT");
         assertTrue(command.isPermittedForReplicas());
         assertNotNull(command.toString());
     }
 
     @Test
-    public void factCountCommandDefaultTest(){
+    public void factCountCommandDefaultTest() {
         FactCountCommand command = new FactCountCommand();
         assertFalse(command.isPermittedForReplicas());
     }
 
     @Test
-    public void factCountCommandTest(){
-        FactCountCommand command = new FactCountCommand( "DEFAULT");
+    public void factCountCommandTest() {
+        FactCountCommand command = new FactCountCommand("DEFAULT");
         assertFalse(command.isPermittedForReplicas());
         assertNotNull(command.toString());
     }
 
     @Test
-    public void fireAllRulesCommandTest(){
+    public void fireAllRulesCommandTest() {
         FireAllRulesCommand command = new FireAllRulesCommand();
         assertTrue(command.isPermittedForReplicas());
         assertNotNull(command.toString());
     }
 
     @Test
-    public void fireUntilHaltCommandTest(){
+    public void fireUntilHaltCommandTest() {
         FireUntilHaltCommand command = new FireUntilHaltCommand();
         assertTrue(command.isPermittedForReplicas());
         assertNotNull(command.toString());
     }
 
     @Test
-    public void getKJarGAVCommandDefaultTest(){
+    public void getKJarGAVCommandDefaultTest() {
         GetKJarGAVCommand command = new GetKJarGAVCommand();
         assertFalse(command.isPermittedForReplicas());
     }
 
     @Test
-    public void getKJarGAVCommandTest(){
+    public void getKJarGAVCommandTest() {
         GetKJarGAVCommand command = new GetKJarGAVCommand("DEFAULT");
         assertFalse(command.isPermittedForReplicas());
         assertNotNull(command.toString());
     }
 
     @Test
-    public void getObjectCommandDefaultTest(){
+    public void getObjectCommandDefaultTest() {
         GetObjectCommand command = new GetObjectCommand();
         assertFalse(command.isPermittedForReplicas());
     }
 
     @Test
-    public void getObjectCommandTest(){
+    public void getObjectCommandTest() {
         GetObjectCommand command = new GetObjectCommand(new RemoteFactHandleImpl(new Object()));
         assertFalse(command.isPermittedForReplicas());
         assertNotNull(command.toString());
     }
 
     @Test
-    public void getWorkingSnapshotOnDemandCommandTest(){
+    public void getWorkingSnapshotOnDemandCommandTest() {
         SnapshotOnDemandCommand command = new SnapshotOnDemandCommand();
         assertFalse(command.isPermittedForReplicas());
         assertNotNull(command.toString());
     }
 
     @Test
-    public void getUpdateCommandDefaultTest(){
+    public void getUpdateCommandDefaultTest() {
         UpdateCommand command = new UpdateCommand();
         assertTrue(command.isPermittedForReplicas());
     }
 
     @Test
-    public void getUpdateCommandTest(){
+    public void getUpdateCommandTest() {
         UpdateCommand command = new UpdateCommand(new RemoteFactHandleImpl(new Object()),
                                                   new Serializable() {
                                                       @Override
@@ -129,6 +131,4 @@ public class SerializableCommandConstructorTest {
         assertTrue(command.isPermittedForReplicas());
         assertNotNull(command.toString());
     }
-
-
 }

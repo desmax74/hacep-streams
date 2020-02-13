@@ -18,7 +18,8 @@ public class MessageTransformer implements ValueTransformer<Message, MessageAccu
     private ProcessorContext context;
 
     public MessageTransformer(String storeName) {
-        Objects.requireNonNull(storeName, "Store Name can't be null");
+        Objects.requireNonNull(storeName,
+                               "Store Name can't be null");
         this.storeName = storeName;
     }
 
@@ -38,7 +39,9 @@ public class MessageTransformer implements ValueTransformer<Message, MessageAccu
         return messageAccumulator;
     }
 
-    public MessageAccumulator punctuate(long timestamp) { return null;  /*no-op*/ }
+    public MessageAccumulator punctuate(long timestamp) {
+        return null;  /*no-op*/
+    }
 
     @Override
     public void close() {/*no-op*/}

@@ -20,14 +20,24 @@ import org.slf4j.LoggerFactory;
 
 public class PrinterLogImpl implements Printer {
 
-  private static Logger logger = LoggerFactory.getLogger(PrinterLogImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(PrinterLogImpl.class);
 
-  public boolean prettyPrinter(String caller, String topic, int partition, long offset, String value,  boolean processed) {
-    if (logger.isInfoEnabled()) {
-      logger.info("Caller:{} - Processed:{} - Topic: {} - Partition: {} - Offset: {} - Value: {}\n",
-                  caller, processed, topic, partition, offset, value);
-      return true;
+    public boolean prettyPrinter(String caller,
+                                 String topic,
+                                 int partition,
+                                 long offset,
+                                 String value,
+                                 boolean processed) {
+        if (logger.isInfoEnabled()) {
+            logger.info("Caller:{} - Processed:{} - Topic: {} - Partition: {} - Offset: {} - Value: {}\n",
+                        caller,
+                        processed,
+                        topic,
+                        partition,
+                        offset,
+                        value);
+            return true;
+        }
+        return false;
     }
-    return false;
-  }
 }

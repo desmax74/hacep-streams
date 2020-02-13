@@ -30,27 +30,35 @@ import org.kie.streams.processor.KieReplicaProcessor;
 
 public class KieTopology {
 
-    private static Serde<String> stringSerde = Serdes.String();
-    private static Deserializer<String> stringDeserializer = stringSerde.deserializer();
     public static String TOPIC_CONTROL = "control";
     public static String TOPIC_EVENTS = "events";
     public static String TOPIC_DESTINATION = "destination";
+    private static Serde<String> stringSerde = Serdes.String();
+    private static Deserializer<String> stringDeserializer = stringSerde.deserializer();
     private static KieLeaderProcessor kieLeaderProcessor = new KieLeaderProcessor();
     private static KieReplicaProcessor kieReplicaProcessor = new KieReplicaProcessor();
 
     public static StreamsBuilder leaderStreamsBuilderDSL(ValueMapper mapper) {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        streamsBuilder.stream(TOPIC_EVENTS, Consumed.with(Serdes.String(), Serdes.String())).
+        streamsBuilder.stream(TOPIC_EVENTS,
+                              Consumed.with(Serdes.String(),
+                                            Serdes.String())).
                 mapValues(mapper).
-                to(TOPIC_CONTROL, Produced.with(Serdes.String(), Serdes.String()));
+                to(TOPIC_CONTROL,
+                   Produced.with(Serdes.String(),
+                                 Serdes.String()));
         return streamsBuilder;
     }
 
     public static StreamsBuilder replicaStreamsBuilder(ValueMapper mapper) {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        streamsBuilder.stream(TOPIC_CONTROL, Consumed.with(Serdes.String(), Serdes.String()))
+        streamsBuilder.stream(TOPIC_CONTROL,
+                              Consumed.with(Serdes.String(),
+                                            Serdes.String()))
                 .mapValues(mapper)
-                .to(TOPIC_DESTINATION, Produced.with(Serdes.String(), Serdes.String()));
+                .to(TOPIC_DESTINATION,
+                    Produced.with(Serdes.String(),
+                                  Serdes.String()));
         return streamsBuilder;
     }
 
@@ -60,13 +68,14 @@ public class KieTopology {
         topology.addSource(Topology.AutoOffsetReset.LATEST,
                            "startNode",
                            new FailOnInvalidTimestamp(),
-                           stringDeserializer, new StringDeserializer(),
+                           stringDeserializer,
+                           new StringDeserializer(),
                            TOPIC_EVENTS)
                 .addProcessor("leaderNode",
-                              ()-> kieLeaderProcessor,
+                              () -> kieLeaderProcessor,
                               "startNode")
                 .addProcessor("replicaNode",
-                              ()-> kieReplicaProcessor,
+                              () -> kieReplicaProcessor,
                               "startNode");//parentNode
         return topology;
     }

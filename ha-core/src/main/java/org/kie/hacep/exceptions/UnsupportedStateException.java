@@ -15,9 +15,9 @@
  */
 package org.kie.hacep.exceptions;
 
-public class UnsupportedStateException extends RuntimeException{
+public class UnsupportedStateException extends RuntimeException {
 
-    public UnsupportedStateException(String msg){
+    public UnsupportedStateException(String msg) {
         super(msg);
     }
 }

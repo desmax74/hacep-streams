@@ -31,19 +31,15 @@ import org.kie.hacep.core.Bootstrap;
 import org.kie.hacep.core.InfraFactory;
 import org.kie.hacep.core.infra.election.State;
 import org.kie.remote.RemoteKieSession;
-import org.kie.remote.TopicsConfig;
 import org.kie.remote.command.FireUntilHaltCommand;
 import org.kie.remote.command.InsertCommand;
 import org.kie.remote.command.RemoteCommand;
-import org.kie.remote.impl.consumer.Listener;
-import org.kie.remote.impl.consumer.ListenerThread;
 import org.kie.remote.message.ControlMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.*;
 import static org.kie.remote.CommonConfig.SKIP_LISTENER_AUTOSTART;
-import static org.kie.remote.CommonConfig.getTestProperties;
 import static org.kie.remote.util.SerializationUtil.deserialize;
 
 public class PodAsLeaderTest extends KafkaFullTopicsTests {
@@ -60,10 +56,16 @@ public class PodAsLeaderTest extends KafkaFullTopicsTests {
                                                                     Config.getConsumerConfig("controlConsumerProcessOneSentMessageAsLeaderTest"));
 
         Properties props = (Properties) Config.getProducerConfig("InsertBatchStockTickets").clone();
-        props.put(SKIP_LISTENER_AUTOSTART, true);
+        props.put(SKIP_LISTENER_AUTOSTART,
+                  true);
 
         logger.warn("Insert Stock Ticket event");
-        kafkaServerTest.insertBatchStockTicketEvent(1, topicsConfig, RemoteKieSession.class, props, InfraFactory.getListener(props, false));
+        kafkaServerTest.insertBatchStockTicketEvent(1,
+                                                    topicsConfig,
+                                                    RemoteKieSession.class,
+                                                    props,
+                                                    InfraFactory.getListener(props,
+                                                                             false));
         try {
             //EVENTS TOPIC
             logger.warn("Checks on Events topic");
@@ -79,10 +81,15 @@ public class PodAsLeaderTest extends KafkaFullTopicsTests {
                 eventsRecords.forEach(o -> {
                     ConsumerRecord<String, byte[]> event = (ConsumerRecord<String, byte[]>) o;
                     assertNotNull(event);
-                    Assert.assertEquals(event.topic(), envConfig.getEventsTopicName());
-                    assertEquals(event.offset(), index.get());
+                    Assert.assertEquals(event.topic(),
+                                        envConfig.getEventsTopicName());
+                    assertEquals(event.offset(),
+                                 index.get());
                     RemoteCommand remoteCommand = deserialize(event.value());
-                    logger.warn("Event {}:{} offset:{}", index.get(), remoteCommand, event.offset());
+                    logger.warn("Event {}:{} offset:{}",
+                                index.get(),
+                                remoteCommand,
+                                event.offset());
                     assertNotNull(remoteCommand.getId());
                     if (index.get() == 0) {
                         firstEvent.set(event);
@@ -96,12 +103,12 @@ public class PodAsLeaderTest extends KafkaFullTopicsTests {
                 });
 
                 int attemptNumber = attempts.incrementAndGet();
-                logger.warn("Attempt number:{}", attemptNumber);
-                if(attempts.get() == 10){
-                    throw new RuntimeException("No Events message available after "+attempts + "attempts.");
+                logger.warn("Attempt number:{}",
+                            attemptNumber);
+                if (attempts.get() == 10) {
+                    throw new RuntimeException("No Events message available after " + attempts + "attempts.");
                 }
             }
-
 
             //CONTROL TOPIC
             logger.warn("Checks on Control topic");
@@ -111,45 +118,51 @@ public class PodAsLeaderTest extends KafkaFullTopicsTests {
             while (messages.size() < 2) {
                 ConsumerRecords controlRecords = controlConsumer.poll(Duration.ofSeconds(2));
                 controlRecords.forEach(o -> {
-                    ConsumerRecord<String,byte[]> control = (ConsumerRecord<String,byte[]>)o;
+                    ConsumerRecord<String, byte[]> control = (ConsumerRecord<String, byte[]>) o;
                     assertNotNull(control);
                     ControlMessage controlMessage = deserialize(control.value());
                     controlMessage.setOffset(control.offset());
-                    logger.warn("Control message found:{}", controlMessage);
+                    logger.warn("Control message found:{}",
+                                controlMessage);
                     messages.add(controlMessage);
                 });
 
                 int attemptNumber = attempts.incrementAndGet();
-                logger.warn("Attempt number:{}", attemptNumber);
-                if(attempts.get() == 10){
-                    throw new RuntimeException("No control message available after "+attempts + "attempts.");
+                logger.warn("Attempt number:{}",
+                            attemptNumber);
+                if (attempts.get() == 10) {
+                    throw new RuntimeException("No control message available after " + attempts + "attempts.");
                 }
             }
 
-            assertEquals(2, messages.size());
+            assertEquals(2,
+                         messages.size());
 
             AtomicReference<ControlMessage> fireUntilHalt = new AtomicReference<>();
             AtomicReference<ControlMessage> insert = new AtomicReference<>();
             index.set(0);
             messages.forEach(controlMessage -> {
-                if(index.get()==0){
+                if (index.get() == 0) {
                     assertNotNull(controlMessage);
                     fireUntilHalt.set(controlMessage);
                 }
-                if(index.get()==1){
+                if (index.get() == 1) {
                     assertNotNull(controlMessage);
                     insert.set(controlMessage);
                 }
                 index.incrementAndGet();
             });
 
-            assertEquals(fireUntilHalt.get().getId(), firstEvent.get().key());
+            assertEquals(fireUntilHalt.get().getId(),
+                         firstEvent.get().key());
             assertTrue(fireUntilHalt.get().getSideEffects().isEmpty());
-            assertEquals(insert.get().getId(), secondEvent.get().key());
+            assertEquals(insert.get().getId(),
+                         secondEvent.get().key());
             assertTrue(!insert.get().getSideEffects().isEmpty());
             logger.warn("Test ended, going to stop kafka");
         } catch (Exception ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
+            throw new RuntimeException(ex.getMessage(),
+                                       ex);
         } finally {
             eventsConsumer.close();
             logger.warn("Event consumer closed");

@@ -29,23 +29,32 @@ import org.kie.remote.impl.RemoteKieSessionImpl;
 import static org.junit.Assert.*;
 import static org.kie.remote.CommonConfig.getTestProperties;
 
-public class RemoteKieSessionImplTest extends KafkaFullTopicsTests{
-
+public class RemoteKieSessionImplTest extends KafkaFullTopicsTests {
 
     @Test
     public void getFactCountTest() {
         Properties props = getTestProperties();
         Bootstrap.startEngine(envConfig);
         Bootstrap.getConsumerController().getCallback().updateStatus(State.LEADER);
-        kafkaServerTest.insertBatchStockTicketEvent(7, topicsConfig, RemoteKieSession.class, InfraFactory.getListener(props, false));
-        RemoteKieSessionImpl client = new RemoteKieSessionImpl(Config.getProducerConfig("getFactCountTest"), InfraFactory.getListener(props, false) , InfraFactory.getProducer(false));
+        kafkaServerTest.insertBatchStockTicketEvent(7,
+                                                    topicsConfig,
+                                                    RemoteKieSession.class,
+                                                    InfraFactory.getListener(props,
+                                                                             false));
+        RemoteKieSessionImpl client = new RemoteKieSessionImpl(Config.getProducerConfig("getFactCountTest"),
+                                                               InfraFactory.getListener(props,
+                                                                                        false),
+                                                               InfraFactory.getProducer(false));
         try {
             client.fireUntilHalt();
             CompletableFuture<Long> factCountFuture = client.getFactCount();
-            Long factCount = factCountFuture.get(20, TimeUnit.SECONDS);
-            assertEquals( new Long(7), factCount);
-        }catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
+            Long factCount = factCountFuture.get(20,
+                                                 TimeUnit.SECONDS);
+            assertEquals(new Long(7),
+                         factCount);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(),
+                                       e);
         } finally {
             client.close();
         }

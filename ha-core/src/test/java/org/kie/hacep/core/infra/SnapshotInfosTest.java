@@ -30,10 +30,11 @@ import static org.junit.Assert.*;
 public class SnapshotInfosTest {
 
     @Test
-    public void constructorTest(){
+    public void constructorTest() {
         EnvConfig config = EnvConfig.getDefaultEnvConfig();
         KieServices ks = KieServices.get();
-        KieContainer kieContainer = KieContainerUtils.getKieContainer(config, ks);
+        KieContainer kieContainer = KieContainerUtils.getKieContainer(config,
+                                                                      ks);
         KieSession kieSession = kieContainer.newKieSession();
         FactHandlesManager fhManager = new FactHandlesManager(kieSession);
 
@@ -42,16 +43,26 @@ public class SnapshotInfosTest {
         LocalDateTime time = LocalDateTime.now();
         String kjarGAV = "org.kie:fake:1.0.0.Snapshot";
         SnapshotInfos infos = new SnapshotInfos(kieSession,
-                                                kieContainer, fhManager, keyDuringSnapshot, offsetDuringSnapshot,
-                                                time, kjarGAV);
+                                                kieContainer,
+                                                fhManager,
+                                                keyDuringSnapshot,
+                                                offsetDuringSnapshot,
+                                                time,
+                                                kjarGAV);
         assertNotNull(infos);
         //@TODO with new constructor
         // assertEquals(infos.getFhManager(), fhManager);
-        assertEquals(infos.getKeyDuringSnaphot(), keyDuringSnapshot);
-        assertEquals(infos.getKieContainer(), kieContainer);
-        assertEquals(infos.getKieSession(), kieSession);
-        assertEquals(infos.getOffsetDuringSnapshot(), offsetDuringSnapshot);
-        assertEquals(infos.getTime(), time);
-        assertEquals(infos.getkJarGAV(), kjarGAV);
+        assertEquals(infos.getKeyDuringSnaphot(),
+                     keyDuringSnapshot);
+        assertEquals(infos.getKieContainer(),
+                     kieContainer);
+        assertEquals(infos.getKieSession(),
+                     kieSession);
+        assertEquals(infos.getOffsetDuringSnapshot(),
+                     offsetDuringSnapshot);
+        assertEquals(infos.getTime(),
+                     time);
+        assertEquals(infos.getkJarGAV(),
+                     kjarGAV);
     }
 }

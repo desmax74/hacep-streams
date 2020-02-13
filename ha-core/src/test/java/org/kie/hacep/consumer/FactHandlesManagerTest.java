@@ -29,32 +29,36 @@ import static org.junit.Assert.*;
 public class FactHandlesManagerTest {
 
     @Test
-    public void getFactHandleByIdTest(){
+    public void getFactHandleByIdTest() {
         KieServices ks = KieServices.get();
         EnvConfig envConfig = EnvConfig.getDefaultEnvConfig();
-        KieContainer kieContainer = KieContainerUtils.getKieContainer(envConfig, ks);
+        KieContainer kieContainer = KieContainerUtils.getKieContainer(envConfig,
+                                                                      ks);
         KieSession kieSession = kieContainer.newKieSession();
         FactHandlesManager manager = new FactHandlesManager(kieSession);
         String myObject = "myObject";
         RemoteFactHandle remoteFactHandle = new RemoteFactHandleImpl(myObject);
         FactHandle factHandle = kieSession.getEntryPoint("DEFAULT").insert(myObject);
-        manager.registerHandle(remoteFactHandle, factHandle);
+        manager.registerHandle(remoteFactHandle,
+                               factHandle);
         assertNotNull(manager.getFactHandleById(remoteFactHandle));
         assertNotNull(manager.toString());
     }
 
     @Test
-    public void getFactHandleByIdSecondTest(){
+    public void getFactHandleByIdSecondTest() {
         KieServices ks = KieServices.get();
         EnvConfig envConfig = EnvConfig.getDefaultEnvConfig();
-        KieContainer kieContainer = KieContainerUtils.getKieContainer(envConfig, ks);
+        KieContainer kieContainer = KieContainerUtils.getKieContainer(envConfig,
+                                                                      ks);
         KieSession kieSession = kieContainer.newKieSession();
         FactHandlesManager manager = new FactHandlesManager();
         manager.initFromKieSession(kieSession);
         String myObject = "myObject";
         RemoteFactHandle remoteFactHandle = new RemoteFactHandleImpl(myObject);
         FactHandle factHandle = kieSession.getEntryPoint("DEFAULT").insert(myObject);
-        manager.registerHandle(remoteFactHandle, factHandle);
+        manager.registerHandle(remoteFactHandle,
+                               factHandle);
         assertNotNull(manager.getFactHandleById(remoteFactHandle));
         assertNotNull(manager.toString());
     }

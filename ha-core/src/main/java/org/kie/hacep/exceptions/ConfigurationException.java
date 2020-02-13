@@ -17,7 +17,7 @@ package org.kie.hacep.exceptions;
 
 public class ConfigurationException extends RuntimeException {
 
-  public ConfigurationException(String msg) {
-    super(msg);
-  }
+    public ConfigurationException(String msg) {
+        super(msg);
+    }
 }

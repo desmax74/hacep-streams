@@ -28,7 +28,8 @@ public class KieContainerUtilsTest {
     public void getKieContainerTest() {
         EnvConfig config = EnvConfig.getDefaultEnvConfig();
         KieServices srv = KieServices.get();
-        KieContainer container = KieContainerUtils.getKieContainer(config, srv);
+        KieContainer container = KieContainerUtils.getKieContainer(config,
+                                                                   srv);
         assertNotNull(container);
     }
 }

@@ -55,16 +55,20 @@ public class KafkaTest {
         KafkaConsumer<String, byte[]> consumer = kafkaServerTest.getByteArrayConsumer(TEST_TOPIC);
 
         ProducerRecord<String, byte[]> data = new ProducerRecord<>(TEST_TOPIC,
-                                                                 "42",
-                                                                 Base64.encodeBase64("test-message".getBytes(Charset.forName("UTF-8"))));
-        kafkaServerTest.sendSingleMsg(producer, data);
+                                                                   "42",
+                                                                   Base64.encodeBase64("test-message".getBytes(Charset.forName("UTF-8"))));
+        kafkaServerTest.sendSingleMsg(producer,
+                                      data);
 
         ConsumerRecords<String, byte[]> records = consumer.poll(Duration.ofMillis(10000));
-        assertEquals(1, records.count());
+        assertEquals(1,
+                     records.count());
         records.forEach(record -> {
             assertNotNull(record);
-            assertEquals("42", record.key());
-            assertEquals("test-message", new String(Base64.decodeBase64(record.value())));
+            assertEquals("42",
+                         record.key());
+            assertEquals("test-message",
+                         new String(Base64.decodeBase64(record.value())));
         });
     }
 
@@ -73,10 +77,13 @@ public class KafkaTest {
         KafkaConsumer<String, String> consumerKafkaLogger = kafkaServerTest.getStringConsumer(TEST_KAFKA_LOGGER_TOPIC);
         kafkaLogger.warn("test-message");
         ConsumerRecords<String, String> records = consumerKafkaLogger.poll(Duration.ofMillis(10000));
-        assertEquals(1, records.count());
+        assertEquals(1,
+                     records.count());
         records.forEach(record -> {
-            assertEquals(TEST_KAFKA_LOGGER_TOPIC, record.topic());
-            assertEquals("test-message", record.value());
+            assertEquals(TEST_KAFKA_LOGGER_TOPIC,
+                         record.topic());
+            assertEquals("test-message",
+                         record.value());
         });
     }
 }

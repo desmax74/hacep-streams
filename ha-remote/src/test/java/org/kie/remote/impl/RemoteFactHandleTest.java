@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 public class RemoteFactHandleTest {
 
     @Test
-    public void defaultConstructorTest(){
+    public void defaultConstructorTest() {
         RemoteFactHandleImpl handle = new RemoteFactHandleImpl();
         assertNotNull(handle);
         assertNotNull(handle.getId());
@@ -30,7 +30,7 @@ public class RemoteFactHandleTest {
     }
 
     @Test
-    public void constructorTest(){
+    public void constructorTest() {
         String mi5 = "005";
         RemoteFactHandleImpl handle = new RemoteFactHandleImpl(mi5);
         assertNotNull(handle);
@@ -39,7 +39,7 @@ public class RemoteFactHandleTest {
     }
 
     @Test
-    public void equalsTest(){
+    public void equalsTest() {
         String mi6 = "006";
         RemoteFactHandleImpl handleMi6 = new RemoteFactHandleImpl(mi6);
         assertNotNull(handleMi6);
@@ -48,7 +48,7 @@ public class RemoteFactHandleTest {
         String mi5 = "005";
         RemoteFactHandleImpl handleMi5 = new RemoteFactHandleImpl(mi5);
         assertFalse(handleMi6.equals(handleMi5));
-        assertNotSame(handleMi6.toString(),handleMi5.toString() );
+        assertNotSame(handleMi6.toString(),
+                      handleMi5.toString());
     }
-
 }

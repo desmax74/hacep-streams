@@ -18,28 +18,29 @@ package org.kie.remote.command;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class ListObjectsCommand extends AbstractCommand implements VisitableCommand, Serializable {
+public class ListObjectsCommand extends AbstractCommand implements VisitableCommand,
+                                                                   Serializable {
 
-  protected String entryPoint;
+    protected String entryPoint;
 
-  public ListObjectsCommand() {/*For serialization*/ }
+    public ListObjectsCommand() {/*For serialization*/ }
 
-  public ListObjectsCommand(String entryPoint) {
-    super(UUID.randomUUID().toString());
-    this.entryPoint = entryPoint;
-  }
+    public ListObjectsCommand(String entryPoint) {
+        super(UUID.randomUUID().toString());
+        this.entryPoint = entryPoint;
+    }
 
-  public String getEntryPoint() {
-    return entryPoint;
-  }
+    public String getEntryPoint() {
+        return entryPoint;
+    }
 
-  @Override
-  public void accept(VisitorCommand visitor) {
-    visitor.visit(this);
-  }
+    @Override
+    public void accept(VisitorCommand visitor) {
+        visitor.visit(this);
+    }
 
-  @Override
-  public boolean isPermittedForReplicas() {
-    return false;
-  }
+    @Override
+    public boolean isPermittedForReplicas() {
+        return false;
+    }
 }

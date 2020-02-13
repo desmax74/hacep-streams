@@ -29,49 +29,49 @@ import static org.junit.Assert.*;
 public class SerializableMessageConstructorTest {
 
     @Test
-    public void controlMessageTest(){
+    public void controlMessageTest() {
         ControlMessage msg = new ControlMessage();
         assertTrue(0l == msg.getOffset());
         assertNotNull(msg.toString());
     }
 
     @Test
-    public void factCountMessageTest(){
+    public void factCountMessageTest() {
         FactCountMessage msg = new FactCountMessage();
         assertTrue(0l == msg.getFactCount());
         assertNotNull(msg.toString());
     }
 
     @Test
-    public void fireAllRuleMessageTest(){
+    public void fireAllRuleMessageTest() {
         FireAllRuleMessage msg = new FireAllRuleMessage();
         assertTrue(0l == msg.getCounter());
         assertNotNull(msg.toString());
     }
 
     @Test
-    public void getKJarGAVMessageTest(){
+    public void getKJarGAVMessageTest() {
         GetKJarGAVMessage msg = new GetKJarGAVMessage();
         assertNull(msg.getkJarGAV());
         assertNotNull(msg.toString());
     }
 
     @Test
-    public void getObjectMessageTest(){
+    public void getObjectMessageTest() {
         GetObjectMessage msg = new GetObjectMessage();
         assertNull(msg.getObject());
         assertNotNull(msg.toString());
     }
 
     @Test
-    public void listKieSessionObjectMessageTest(){
+    public void listKieSessionObjectMessageTest() {
         ListKieSessionObjectMessage msg = new ListKieSessionObjectMessage();
         assertNull(msg.getObjects());
         assertNotNull(msg.toString());
     }
 
     @Test
-    public void updateKJarMessageTest(){
+    public void updateKJarMessageTest() {
         UpdateKJarMessage msg = new UpdateKJarMessage();
         assertNull(msg.getId());
         assertNotNull(msg.toString());

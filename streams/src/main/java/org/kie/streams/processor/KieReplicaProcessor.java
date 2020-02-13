@@ -20,29 +20,24 @@ import org.kie.remote.message.ControlMessage;
 
 public class KieReplicaProcessor extends AbstractProcessor<String, ControlMessage> {
 
-  private String replicaNode;
-  private String leaderNode;
+    private String replicaNode;
+    private String leaderNode;
 
-  public KieReplicaProcessor(){}
+    public KieReplicaProcessor() {
+    }
 
-  public KieReplicaProcessor(String leaderNode, String replicaNode){
-    this.leaderNode = leaderNode;
-    this.replicaNode = replicaNode;
-  }
+    public KieReplicaProcessor(String leaderNode,
+                               String replicaNode) {
+        this.leaderNode = leaderNode;
+        this.replicaNode = replicaNode;
+    }
 
-  @Override
-  public void process(String key, ControlMessage msg) {
-      //msg.
-      //@TODO
-      context().forward(key, "value");
-
-  }
-
-
-
-
-
-
-
-
+    @Override
+    public void process(String key,
+                        ControlMessage msg) {
+        //msg.
+        //@TODO
+        context().forward(key,
+                          "value");
+    }
 }

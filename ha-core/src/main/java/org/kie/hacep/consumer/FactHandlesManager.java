@@ -31,62 +31,66 @@ import org.kie.remote.RemoteFactHandle;
 
 public class FactHandlesManager implements Serializable {
 
-  private BidirectionalMap<RemoteFactHandle, Long> fhIdMap;
-  private transient KieSession kieSession;
-  private transient Map<RemoteFactHandle, InternalFactHandle> fhMap;
+    private BidirectionalMap<RemoteFactHandle, Long> fhIdMap;
+    private transient KieSession kieSession;
+    private transient Map<RemoteFactHandle, InternalFactHandle> fhMap;
 
-  //for serialization purpose
-  public FactHandlesManager() {
-    fhMap = new HashMap<>();
-    fhIdMap = new BidirectionalMap<>();
-  }
-
-  public FactHandlesManager(KieSession kieSession) {
-    this.kieSession = kieSession;
-    fhMap = new HashMap<>();
-    fhIdMap = new BidirectionalMap<>();
-  }
-
-  public Set<RemoteFactHandle> getFhMapKeys() {
-    return fhIdMap.keySet();
-  }
-
-  public void registerHandle(RemoteFactHandle remoteFH, FactHandle fh) {
-    InternalFactHandle ifh = (InternalFactHandle) fh;
-    fhMap.put(remoteFH, ifh);
-    fhIdMap.put(remoteFH, ifh.getId());
-  }
-
-  public FactHandlesManager initFromKieSession(KieSession kieSession) {
-    this.kieSession = kieSession;
-    kieSession.addEventListener(new DefaultRuleRuntimeEventListener() {
-      @Override
-      public void objectDeleted(ObjectDeletedEvent objectDeletedEvent) {
-        fhMap.remove(fhIdMap.removeValue(((InternalFactHandle) objectDeletedEvent.getFactHandle()).getId()));
-      }
-    });
-    fhMap.clear();
-    return this;
-  }
-
-  public FactHandle mapRemoteFactHandle(RemoteFactHandle remoteFH) {
-    return fhMap.computeIfAbsent(remoteFH, this::getFactHandleById);
-  }
-
-  /*public for test*/
-  public InternalFactHandle getFactHandleById(RemoteFactHandle remoteFH) {
-    long id = fhIdMap.get(remoteFH);
-    for (FactHandle fh : kieSession.getFactHandles(new ClassObjectFilter(remoteFH.getObject().getClass()))) {
-      InternalFactHandle ifh = (InternalFactHandle) fh;
-      if (ifh.getId() == id) {
-        return ifh;
-      }
+    //for serialization purpose
+    public FactHandlesManager() {
+        fhMap = new HashMap<>();
+        fhIdMap = new BidirectionalMap<>();
     }
-    throw new IllegalArgumentException();
-  }
 
-  @Override
-  public String toString() {
-    return fhIdMap.keySet().toString();
-  }
+    public FactHandlesManager(KieSession kieSession) {
+        this.kieSession = kieSession;
+        fhMap = new HashMap<>();
+        fhIdMap = new BidirectionalMap<>();
+    }
+
+    public Set<RemoteFactHandle> getFhMapKeys() {
+        return fhIdMap.keySet();
+    }
+
+    public void registerHandle(RemoteFactHandle remoteFH,
+                               FactHandle fh) {
+        InternalFactHandle ifh = (InternalFactHandle) fh;
+        fhMap.put(remoteFH,
+                  ifh);
+        fhIdMap.put(remoteFH,
+                    ifh.getId());
+    }
+
+    public FactHandlesManager initFromKieSession(KieSession kieSession) {
+        this.kieSession = kieSession;
+        kieSession.addEventListener(new DefaultRuleRuntimeEventListener() {
+            @Override
+            public void objectDeleted(ObjectDeletedEvent objectDeletedEvent) {
+                fhMap.remove(fhIdMap.removeValue(((InternalFactHandle) objectDeletedEvent.getFactHandle()).getId()));
+            }
+        });
+        fhMap.clear();
+        return this;
+    }
+
+    public FactHandle mapRemoteFactHandle(RemoteFactHandle remoteFH) {
+        return fhMap.computeIfAbsent(remoteFH,
+                                     this::getFactHandleById);
+    }
+
+    /*public for test*/
+    public InternalFactHandle getFactHandleById(RemoteFactHandle remoteFH) {
+        long id = fhIdMap.get(remoteFH);
+        for (FactHandle fh : kieSession.getFactHandles(new ClassObjectFilter(remoteFH.getObject().getClass()))) {
+            InternalFactHandle ifh = (InternalFactHandle) fh;
+            if (ifh.getId() == id) {
+                return ifh;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    @Override
+    public String toString() {
+        return fhIdMap.keySet().toString();
+    }
 }

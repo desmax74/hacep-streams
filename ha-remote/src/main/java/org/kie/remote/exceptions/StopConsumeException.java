@@ -17,11 +17,13 @@ package org.kie.remote.exceptions;
 
 public class StopConsumeException extends RuntimeException {
 
-    public StopConsumeException(String msg){
+    public StopConsumeException(String msg) {
         super(msg);
     }
 
-    public StopConsumeException(String msg, Throwable t){
-        super(msg, t);
+    public StopConsumeException(String msg,
+                                Throwable t) {
+        super(msg,
+              t);
     }
 }

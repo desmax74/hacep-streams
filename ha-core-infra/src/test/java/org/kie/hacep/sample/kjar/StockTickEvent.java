@@ -30,18 +30,24 @@ public class StockTickEvent implements Serializable {
     private long timestamp;
     private boolean processed = false;
 
-    public StockTickEvent( String company, double price) {
-        this(company, price, System.currentTimeMillis());
+    public StockTickEvent(String company,
+                          double price) {
+        this(company,
+             price,
+             System.currentTimeMillis());
     }
 
-    public StockTickEvent( String company, double price, long timestamp) {
+    public StockTickEvent(String company,
+                          double price,
+                          long timestamp) {
         this.company = company;
         this.price = price;
         this.timestamp = timestamp;
     }
 
     /* Empty constructor for serialization */
-    public StockTickEvent() {}
+    public StockTickEvent() {
+    }
 
     public String getCompany() {
         return company;

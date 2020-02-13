@@ -23,74 +23,74 @@ import org.kie.hacep.consumer.FactHandlesManager;
 
 public class SnapshotInfos {
 
-  private KieSession kieSession;
-  private KieContainer kieContainer;
-  private FactHandlesManager fhManager;
-  private String keyDuringSnaphot;
-  private long offsetDuringSnapshot;
-  private LocalDateTime time;
-  private String kJarGAV;
+    private KieSession kieSession;
+    private KieContainer kieContainer;
+    private FactHandlesManager fhManager;
+    private String keyDuringSnaphot;
+    private long offsetDuringSnapshot;
+    private LocalDateTime time;
+    private String kJarGAV;
 
-  public SnapshotInfos(KieSession kieSession,
-                       KieContainer kieContainer,
-                       FactHandlesManager fhManager,
-                       String keyDuringSnaphot,
-                       long offsetDuringSnapshot,
-                       LocalDateTime time,
-                       String kjarGAV) {
-    this.kieSession = kieSession;
-    this.kieContainer = kieContainer;
-    if(fhManager == null || fhManager.getFhMapKeys().isEmpty()){
-      this.fhManager = new FactHandlesManager();
-      this.fhManager.initFromKieSession(kieSession);
-    }else {
-      this.fhManager = fhManager.initFromKieSession(kieSession);
+    public SnapshotInfos(KieSession kieSession,
+                         KieContainer kieContainer,
+                         FactHandlesManager fhManager,
+                         String keyDuringSnaphot,
+                         long offsetDuringSnapshot,
+                         LocalDateTime time,
+                         String kjarGAV) {
+        this.kieSession = kieSession;
+        this.kieContainer = kieContainer;
+        if (fhManager == null || fhManager.getFhMapKeys().isEmpty()) {
+            this.fhManager = new FactHandlesManager();
+            this.fhManager.initFromKieSession(kieSession);
+        } else {
+            this.fhManager = fhManager.initFromKieSession(kieSession);
+        }
+        this.keyDuringSnaphot = keyDuringSnaphot;
+        this.offsetDuringSnapshot = offsetDuringSnapshot;
+        this.time = time;
+        this.kJarGAV = kjarGAV;
     }
-    this.keyDuringSnaphot = keyDuringSnaphot;
-    this.offsetDuringSnapshot = offsetDuringSnapshot;
-    this.time = time;
-    this.kJarGAV = kjarGAV;
-  }
 
-  public KieSession getKieSession() {
-    return kieSession;
-  }
+    public KieSession getKieSession() {
+        return kieSession;
+    }
 
-  public KieContainer getKieContainer() {
-    return kieContainer;
-  }
+    public KieContainer getKieContainer() {
+        return kieContainer;
+    }
 
-  public FactHandlesManager getFhManager() {
-    return fhManager;
-  }
+    public FactHandlesManager getFhManager() {
+        return fhManager;
+    }
 
-  public String getKeyDuringSnaphot() {
-    return keyDuringSnaphot;
-  }
+    public String getKeyDuringSnaphot() {
+        return keyDuringSnaphot;
+    }
 
-  public long getOffsetDuringSnapshot() {
-    return offsetDuringSnapshot;
-  }
+    public long getOffsetDuringSnapshot() {
+        return offsetDuringSnapshot;
+    }
 
-  public LocalDateTime getTime() {
-    return time;
-  }
+    public LocalDateTime getTime() {
+        return time;
+    }
 
-  public String getkJarGAV() {
-    return kJarGAV;
-  }
+    public String getkJarGAV() {
+        return kJarGAV;
+    }
 
-  @Override
-  public String toString() {
-    final StringBuilder sb = new StringBuilder("SnapshotInfos{");
-    sb.append("kieSession=").append(kieSession);
-    sb.append(", kieContainer=").append(kieContainer);
-    sb.append(", fhManager=").append(fhManager);
-    sb.append(", keyDuringSnaphot='").append(keyDuringSnaphot).append('\'');
-    sb.append(", offsetDuringSnapshot=").append(offsetDuringSnapshot);
-    sb.append(", time=").append(time);
-    sb.append(", kJarGAV='").append(kJarGAV).append('\'');
-    sb.append('}');
-    return sb.toString();
-  }
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SnapshotInfos{");
+        sb.append("kieSession=").append(kieSession);
+        sb.append(", kieContainer=").append(kieContainer);
+        sb.append(", fhManager=").append(fhManager);
+        sb.append(", keyDuringSnaphot='").append(keyDuringSnaphot).append('\'');
+        sb.append(", offsetDuringSnapshot=").append(offsetDuringSnapshot);
+        sb.append(", time=").append(time);
+        sb.append(", kJarGAV='").append(kJarGAV).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

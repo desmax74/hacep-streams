@@ -17,11 +17,13 @@ package org.kie.remote.util;
 
 public class SerializationException extends RuntimeException {
 
-  public SerializationException(String msg){
-    super(msg);
-  }
+    public SerializationException(String msg) {
+        super(msg);
+    }
 
-  public SerializationException(String msg, Throwable t){
-    super(msg, t);
-  }
+    public SerializationException(String msg,
+                                  Throwable t) {
+        super(msg,
+              t);
+    }
 }

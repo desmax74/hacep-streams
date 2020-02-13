@@ -25,48 +25,56 @@ import static org.junit.Assert.*;
 
 public class KieSerDesTest {
 
-  private KieSerializer serializer ;
-  private KieDeserializer deserializer;
+    private KieSerializer serializer;
+    private KieDeserializer deserializer;
 
-  @Before
-  public void setup(){
-    serializer  = new KieSerializer();
-    deserializer = new KieDeserializer(ControlMessage.class);
-  }
+    @Before
+    public void setup() {
+        serializer = new KieSerializer();
+        deserializer = new KieDeserializer(ControlMessage.class);
+    }
 
-  @Test
-  public void deserializerTest(){
-    ControlMessage msg = new ControlMessage("13", new ArrayDeque());
-    msg.setOffset(1l);
-    byte[] bytes = serialize(msg);
-    ControlMessage deserMsg = (ControlMessage) deserializer.deserialize("control", bytes);
-    assertNotNull(deserMsg);
-    assertEquals(msg.getId(), deserMsg.getId());
-    assertTrue(msg.getOffset() == deserMsg.getOffset());
-    assertTrue(msg.getSideEffects().size() == deserMsg.getSideEffects().size());
-  }
+    @Test
+    public void deserializerTest() {
+        ControlMessage msg = new ControlMessage("13",
+                                                new ArrayDeque());
+        msg.setOffset(1l);
+        byte[] bytes = serialize(msg);
+        ControlMessage deserMsg = (ControlMessage) deserializer.deserialize("control",
+                                                                            bytes);
+        assertNotNull(deserMsg);
+        assertEquals(msg.getId(),
+                     deserMsg.getId());
+        assertTrue(msg.getOffset() == deserMsg.getOffset());
+        assertTrue(msg.getSideEffects().size() == deserMsg.getSideEffects().size());
+    }
 
-  @Test
-  public void serializerTest(){
-    ControlMessage msg = new ControlMessage("13", new ArrayDeque());
-    msg.setOffset(1l);
-    byte[] bytes = serialize(msg);
-    assertNotNull(bytes);
+    @Test
+    public void serializerTest() {
+        ControlMessage msg = new ControlMessage("13",
+                                                new ArrayDeque());
+        msg.setOffset(1l);
+        byte[] bytes = serialize(msg);
+        assertNotNull(bytes);
 
-    ControlMessage deserMsg = (ControlMessage) deserializer.deserialize("control", bytes);
-    assertNotNull(deserMsg);
-    assertEquals(msg.getId(), deserMsg.getId());
-    assertTrue(msg.getOffset() == deserMsg.getOffset());
-    assertTrue(msg.getSideEffects().size() == deserMsg.getSideEffects().size());
-  }
+        ControlMessage deserMsg = (ControlMessage) deserializer.deserialize("control",
+                                                                            bytes);
+        assertNotNull(deserMsg);
+        assertEquals(msg.getId(),
+                     deserMsg.getId());
+        assertTrue(msg.getOffset() == deserMsg.getOffset());
+        assertTrue(msg.getSideEffects().size() == deserMsg.getSideEffects().size());
+    }
 
-  private byte[] serialize(ControlMessage msg){
-    byte[] bytes = serializer.serialize("control", msg);
-    return bytes;
-  }
+    private byte[] serialize(ControlMessage msg) {
+        byte[] bytes = serializer.serialize("control",
+                                            msg);
+        return bytes;
+    }
 
-  private ControlMessage deserialize(byte[] bytes){
-    Object o = deserializer.deserialize("control", bytes);
-    return (ControlMessage) o;
-  }
+    private ControlMessage deserialize(byte[] bytes) {
+        Object o = deserializer.deserialize("control",
+                                            bytes);
+        return (ControlMessage) o;
+    }
 }

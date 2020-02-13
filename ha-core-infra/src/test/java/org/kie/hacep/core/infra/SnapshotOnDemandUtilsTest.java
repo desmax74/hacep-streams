@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 public class SnapshotOnDemandUtilsTest {
 
     @Test(expected = org.apache.kafka.common.KafkaException.class)
-    public void askAKafkaConsumerWithoutServerUpTest(){
+    public void askAKafkaConsumerWithoutServerUpTest() {
         EnvConfig config = EnvConfig.getDefaultEnvConfig();
         config.local(false);
         config.underTest(false);
@@ -36,13 +36,15 @@ public class SnapshotOnDemandUtilsTest {
     }
 
     @Test(expected = org.apache.kafka.common.KafkaException.class)
-    public void askASnapshotWithoutServerUpTest(){
+    public void askASnapshotWithoutServerUpTest() {
         EnvConfig config = EnvConfig.getDefaultEnvConfig();
         config.local(false);
         config.underTest(false);
         SessionSnapshooter sessionSnapshooter = new DefaultSessionSnapShooter(config);
         Producer producer = InfraFactory.getProducer(config.isLocal());
-        SnapshotInfos infos = SnapshotOnDemandUtilsImpl.askASnapshotOnDemand(config, sessionSnapshooter, producer );
+        SnapshotInfos infos = SnapshotOnDemandUtilsImpl.askASnapshotOnDemand(config,
+                                                                             sessionSnapshooter,
+                                                                             producer);
         assertNull(infos);
     }
 }

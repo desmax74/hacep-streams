@@ -31,11 +31,11 @@ public class GlobalStatusTest {
 
     @Test
     public void nodeLiveTest() {
-        if(GlobalStatus.isNodeLive()) {
+        if (GlobalStatus.isNodeLive()) {
             assertTrue(GlobalStatus.isNodeLive());
             GlobalStatus.setNodeLive(false);
             assertFalse(GlobalStatus.isNodeLive());
-        }else{
+        } else {
             assertFalse(GlobalStatus.isNodeLive());
             GlobalStatus.setNodeLive(true);
             assertTrue(GlobalStatus.isNodeLive());
@@ -44,11 +44,11 @@ public class GlobalStatusTest {
 
     @Test
     public void nodeReadyTest() {
-        if(GlobalStatus.isNodeReady()){
+        if (GlobalStatus.isNodeReady()) {
             assertTrue(GlobalStatus.isNodeReady());
             GlobalStatus.setNodeReady(false);
             assertFalse(GlobalStatus.isNodeReady());
-        }else{
+        } else {
             assertFalse(GlobalStatus.isNodeReady());
             GlobalStatus.setNodeReady(true);
             assertTrue(GlobalStatus.isNodeReady());

@@ -19,34 +19,36 @@ import org.junit.Test;
 
 public class ExceptionsTest {
 
-
     @Test(expected = ConfigurationException.class)
-    public void ConfigurationExceptionTest(){
+    public void ConfigurationExceptionTest() {
         throw new ConfigurationException("This is a test");
     }
 
     @Test(expected = InitializeException.class)
-    public void InitializeExceptionTest(){
+    public void InitializeExceptionTest() {
         throw new InitializeException("This is a test");
     }
 
     @Test(expected = ProcessCommandException.class)
-    public void ProcessCommandExceptionTest(){
-        throw new ProcessCommandException("This is a test", new Throwable("This is a test"));
+    public void ProcessCommandExceptionTest() {
+        throw new ProcessCommandException("This is a test",
+                                          new Throwable("This is a test"));
     }
 
     @Test(expected = ShutdownException.class)
-    public void ShutdownExceptionTest(){
-        throw new ShutdownException("This is a test", new Throwable("This is a test"));
+    public void ShutdownExceptionTest() {
+        throw new ShutdownException("This is a test",
+                                    new Throwable("This is a test"));
     }
 
     @Test(expected = SnapshotOnDemandException.class)
-    public void SnapshotOnDemandExceptionTest(){
-        throw new SnapshotOnDemandException("This is a test", new Throwable("This is a test"));
+    public void SnapshotOnDemandExceptionTest() {
+        throw new SnapshotOnDemandException("This is a test",
+                                            new Throwable("This is a test"));
     }
 
     @Test(expected = UnsupportedStateException.class)
-    public void UnsupportedStateExceptionTest(){
+    public void UnsupportedStateExceptionTest() {
         throw new UnsupportedStateException("This is a test");
     }
 }

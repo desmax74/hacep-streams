@@ -33,26 +33,41 @@ public class ConfigMapLockUtilsTest {
     static Logger logger = LoggerFactory.getLogger(ConfigMapLockUtilsTest.class);
 
     @Test
-    public void methodsTest(){
+    public void methodsTest() {
         String groupName = "drools-group";
         String leader = "leader-x13X";
         Date timestamp = Calendar.getInstance().getTime();
-        Set<String> members = new HashSet<>(Arrays.asList("Qui", "Quo", "Qua"));
-        LeaderInfo info = new LeaderInfo(groupName, leader, timestamp,members);
-        logger.info("leaderInfo:{}", info.toString());
+        Set<String> members = new HashSet<>(Arrays.asList("Qui",
+                                                          "Quo",
+                                                          "Qua"));
+        LeaderInfo info = new LeaderInfo(groupName,
+                                         leader,
+                                         timestamp,
+                                         members);
+        logger.info("leaderInfo:{}",
+                    info.toString());
         assertFalse(info.hasEmptyLeader());
         assertFalse(info.isValidLeader(null));
         assertFalse(info.hasValidLeader());
-        assertEquals(groupName,info.getGroupName());
-        assertEquals(leader,info.getLeader());
-        assertEquals(timestamp,info.getLocalTimestamp());
-        assertEquals(members,info.getMembers());
-        ConfigMap configMap = ConfigMapLockUtils.createNewConfigMap("my-map",info);
+        assertEquals(groupName,
+                     info.getGroupName());
+        assertEquals(leader,
+                     info.getLeader());
+        assertEquals(timestamp,
+                     info.getLocalTimestamp());
+        assertEquals(members,
+                     info.getMembers());
+        ConfigMap configMap = ConfigMapLockUtils.createNewConfigMap("my-map",
+                                                                    info);
         assertNotNull(configMap);
-        LeaderInfo leaderInfo = ConfigMapLockUtils.getLeaderInfo(configMap, members,groupName);
-        logger.info("leaderInfo:{}", leaderInfo.toString());
+        LeaderInfo leaderInfo = ConfigMapLockUtils.getLeaderInfo(configMap,
+                                                                 members,
+                                                                 groupName);
+        logger.info("leaderInfo:{}",
+                    leaderInfo.toString());
         assertNotNull(leaderInfo);
-        ConfigMap newConfigMap = ConfigMapLockUtils.getConfigMapWithNewLeader(configMap, leaderInfo);
+        ConfigMap newConfigMap = ConfigMapLockUtils.getConfigMapWithNewLeader(configMap,
+                                                                              leaderInfo);
         assertNotNull(newConfigMap);
     }
 }

@@ -19,12 +19,14 @@ package org.kie.hacep.sample.kjar;
 import java.io.Serializable;
 
 public class Result implements Serializable {
+
     private String stockName;
     private Object value;
 
-    public Result() { }
+    public Result() {
+    }
 
-    public Result( String stockName ) {
+    public Result(String stockName) {
         this.stockName = stockName;
     }
 
@@ -36,7 +38,7 @@ public class Result implements Serializable {
         return value;
     }
 
-    public void setValue( Object value ) {
+    public void setValue(Object value) {
         this.value = value;
     }
 

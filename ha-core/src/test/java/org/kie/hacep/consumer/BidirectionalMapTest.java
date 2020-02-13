@@ -22,14 +22,16 @@ import static org.junit.Assert.*;
 public class BidirectionalMapTest {
 
     @Test
-    public void bidirectionalMapTest(){
+    public void bidirectionalMapTest() {
         BidirectionalMap map = new BidirectionalMap();
-        map.put("one", 1);
+        map.put("one",
+                1);
         Object res = map.getKey(1);
         assertNotNull(res);
         assertTrue(res.equals("one"));
         assertNotNull(map.removeValue(1));
-        map.put("one", 2);
+        map.put("one",
+                2);
         assertNotNull(map.remove("one"));
     }
 }

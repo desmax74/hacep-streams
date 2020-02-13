@@ -19,11 +19,14 @@ package org.kie.remote;
 import java.io.Closeable;
 import java.util.concurrent.CompletableFuture;
 
-public interface RemoteKieSession extends Closeable, RemoteEntryPoint, RemoteStatefulSession, UpdatableSession {
+public interface RemoteKieSession extends Closeable,
+                                          RemoteEntryPoint,
+                                          RemoteStatefulSession,
+                                          UpdatableSession {
 
-  RemoteEntryPoint getEntryPoint(String name);
+    RemoteEntryPoint getEntryPoint(String name);
 
-  CompletableFuture<String> getKJarGAV();
+    CompletableFuture<String> getKJarGAV();
 
-  CompletableFuture<Boolean> updateKJarGAV(String kjar);
+    CompletableFuture<Boolean> updateKJarGAV(String kjar);
 }

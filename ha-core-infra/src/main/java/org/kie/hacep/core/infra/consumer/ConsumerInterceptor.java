@@ -25,38 +25,41 @@ import org.slf4j.LoggerFactory;
 
 public class ConsumerInterceptor implements org.apache.kafka.clients.consumer.ConsumerInterceptor {
 
-  private Logger logger = LoggerFactory.getLogger(ConsumerInterceptor.class);
+    private Logger logger = LoggerFactory.getLogger(ConsumerInterceptor.class);
 
-  public ConsumerInterceptor(){
-    logger.info("Built ConsumerInterceptor");
-  }
-
-  @Override
-  public ConsumerRecords onConsume(ConsumerRecords consumerRecords) {
-    logger.info("Intercepted ConsumerRecords {}", buildMessage(consumerRecords.iterator()));
-    return consumerRecords;
-  }
-
-  @Override
-  public void onCommit(Map map) {
-    logger.info("Commit information {}", map);
-  }
-
-  @Override
-  public void close() {
-    logger.info("close ConsumerInterceptor");
-  }
-
-  @Override
-  public void configure(Map<String, ?> map) {
-    logger.info("configure:{}", map);
-  }
-
-  private String buildMessage(Iterator<ConsumerRecord<Object, Object>> consumerRecords) {
-    StringBuilder stringBuilder = new StringBuilder();
-    while (consumerRecords.hasNext()) {
-      stringBuilder.append(consumerRecords.next());
+    public ConsumerInterceptor() {
+        logger.info("Built ConsumerInterceptor");
     }
-    return stringBuilder.toString();
-  }
+
+    @Override
+    public ConsumerRecords onConsume(ConsumerRecords consumerRecords) {
+        logger.info("Intercepted ConsumerRecords {}",
+                    buildMessage(consumerRecords.iterator()));
+        return consumerRecords;
+    }
+
+    @Override
+    public void onCommit(Map map) {
+        logger.info("Commit information {}",
+                    map);
+    }
+
+    @Override
+    public void close() {
+        logger.info("close ConsumerInterceptor");
+    }
+
+    @Override
+    public void configure(Map<String, ?> map) {
+        logger.info("configure:{}",
+                    map);
+    }
+
+    private String buildMessage(Iterator<ConsumerRecord<Object, Object>> consumerRecords) {
+        StringBuilder stringBuilder = new StringBuilder();
+        while (consumerRecords.hasNext()) {
+            stringBuilder.append(consumerRecords.next());
+        }
+        return stringBuilder.toString();
+    }
 }

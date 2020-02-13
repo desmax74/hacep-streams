@@ -22,14 +22,21 @@ import org.kie.hacep.Config;
 
 public class StreamsKieConfig {
 
-    private String applicationID;
     public static String APPLICATION_ID_DEFAULT = "drools";
+    private String applicationID;
     private String bootstrapServerURL;
 
-    private StreamsKieConfig() { }
+    private StreamsKieConfig() {
+    }
 
     public static StreamsKieConfig anStreamsKieConfig() {
         return new StreamsKieConfig();
+    }
+
+    public static StreamsKieConfig getDefaultStreamsKieConfig() {
+        return anStreamsKieConfig().
+                withApplicationId(Optional.ofNullable(System.getenv(StreamsConfig.APPLICATION_ID_CONFIG)).orElse(APPLICATION_ID_DEFAULT)).
+                withBootstrapServerURL(Config.getBootStrapServers());
     }
 
     public String getApplicationID() {
@@ -38,12 +45,6 @@ public class StreamsKieConfig {
 
     public String getBootstrapServerURL() {
         return bootstrapServerURL;
-    }
-
-    public static StreamsKieConfig getDefaultStreamsKieConfig() {
-        return anStreamsKieConfig().
-                withApplicationId(Optional.ofNullable(System.getenv(StreamsConfig.APPLICATION_ID_CONFIG)).orElse(APPLICATION_ID_DEFAULT)).
-                withBootstrapServerURL(Config.getBootStrapServers());
     }
 
     public StreamsKieConfig withApplicationId(String applicationID) {

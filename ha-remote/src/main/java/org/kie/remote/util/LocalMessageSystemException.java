@@ -17,11 +17,13 @@ package org.kie.remote.util;
 
 public class LocalMessageSystemException extends RuntimeException {
 
-  public LocalMessageSystemException(String msg){
-    super(msg);
-  }
+    public LocalMessageSystemException(String msg) {
+        super(msg);
+    }
 
-  public LocalMessageSystemException(String msg, Throwable t){
-    super(msg, t);
-  }
+    public LocalMessageSystemException(String msg,
+                                       Throwable t) {
+        super(msg,
+              t);
+    }
 }

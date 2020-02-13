@@ -39,8 +39,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 public class KieTopologyLeaderDSLShowCasesTest {
 
@@ -54,38 +54,49 @@ public class KieTopologyLeaderDSLShowCasesTest {
     @Before
     public void setUp() {
         Properties props = new Properties();
-        props.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "drools-test");
-        props.setProperty(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9091");
+        props.setProperty(StreamsConfig.APPLICATION_ID_CONFIG,
+                          "drools-test");
+        props.setProperty(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,
+                          "localhost:9091");
         final StreamsBuilder builder = KieTopology.leaderStreamsBuilderDSL(s -> s.toString().toUpperCase());
-        driver = new TopologyTestDriver(builder.build(), props);
+        driver = new TopologyTestDriver(builder.build(),
+                                        props);
         stringSerializer = new StringSerializer();
         stringDeserializer = new StringDeserializer();
-        inputTopic = driver.createInputTopic("events", stringSerializer, stringSerializer);
-        outputTopic = driver.createOutputTopic("control", stringDeserializer, stringDeserializer);
+        inputTopic = driver.createInputTopic("events",
+                                             stringSerializer,
+                                             stringSerializer);
+        outputTopic = driver.createOutputTopic("control",
+                                               stringDeserializer,
+                                               stringDeserializer);
     }
 
     @After
-    public void teardown(){
+    public void teardown() {
         try {
-            if(driver!= null) {
+            if (driver != null) {
                 driver.close();
             }
         } catch (final RuntimeException e) {
-            logger.warn("Ignoring exception, test failing in Windows due this exception: {}", e.getLocalizedMessage());
+            logger.warn("Ignoring exception, test failing in Windows due this exception: {}",
+                        e.getLocalizedMessage());
         }
     }
 
     @Test
     public void testValue() {
-        inputTopic.pipeInput("9", "Hello");
+        inputTopic.pipeInput("9",
+                             "Hello");
         assertTrue(outputTopic.readValue().equals("HELLO"));
         assertTrue(outputTopic.isEmpty());
     }
 
     @Test
     public void testKeyValue() {
-        inputTopic.pipeInput("9", "Hello");
-        assertTrue(outputTopic.readKeyValue().equals(new KeyValue<>("9","HELLO")));
+        inputTopic.pipeInput("9",
+                             "Hello");
+        assertTrue(outputTopic.readKeyValue().equals(new KeyValue<>("9",
+                                                                    "HELLO")));
         assertTrue(outputTopic.isEmpty());
     }
 
@@ -93,22 +104,30 @@ public class KieTopologyLeaderDSLShowCasesTest {
     public void testHeadersIgnoringTimestamp() {
         final Headers headers = new RecordHeaders(
                 new Header[]{
-                        new RecordHeader("foo", "value".getBytes())
+                        new RecordHeader("foo",
+                                         "value".getBytes())
                 });
-        inputTopic.pipeInput(new TestRecord<>("9", "HELLO", headers));
-        assertThat(outputTopic.readRecord()).isEqualToIgnoringNullFields(new TestRecord<>("9", "HELLO",  headers));
+        inputTopic.pipeInput(new TestRecord<>("9",
+                                              "HELLO",
+                                              headers));
+        assertThat(outputTopic.readRecord()).isEqualToIgnoringNullFields(new TestRecord<>("9",
+                                                                                          "HELLO",
+                                                                                          headers));
         assertThat(outputTopic.isEmpty()).isTrue();
     }
 
     @Test
     public void testKeyValueList() {
-        final List<String> inputList = Arrays.asList("THIS", "IS", "SPARTA", "!!!!!");
+        final List<String> inputList = Arrays.asList("THIS",
+                                                     "IS",
+                                                     "SPARTA",
+                                                     "!!!!!");
         final List<KeyValue<String, String>> expected = new LinkedList<>();
         for (String s : inputList) {
-            expected.add(new KeyValue<>(null, s));
+            expected.add(new KeyValue<>(null,
+                                        s));
         }
         inputTopic.pipeValueList(inputList);
         assertThat(outputTopic.readKeyValuesToList()).hasSameElementsAs(expected);
     }
-
 }

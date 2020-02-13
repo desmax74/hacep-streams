@@ -30,7 +30,11 @@ public class PrinterUtilTest {
         EnvConfig config = EnvConfig.getDefaultEnvConfig();
         Printer printer = PrinterUtil.getPrinter(config);
         assertNotNull(printer);
-        ConsumerRecord record = new ConsumerRecord("events", 1, 1l, "1", "boh");
+        ConsumerRecord record = new ConsumerRecord("events",
+                                                   1,
+                                                   1l,
+                                                   "1",
+                                                   "boh");
         assertTrue(printer.prettyPrinter("PrinterUtilTest.getPrinterTest",
                                          record.topic(),
                                          record.partition(),

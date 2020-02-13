@@ -19,37 +19,50 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.junit.Test;
-import static org.junit.Assert.assertNotNull;
+
+import static org.junit.Assert.*;
 
 public class KieTableFactoryTest {
 
-  @Test
-  public void createTableTest(){
-      assertNotNull(KieTableFactory.createTable("events"));
-  }
+    @Test
+    public void createTableTest() {
+        assertNotNull(KieTableFactory.createTable("events"));
+    }
 
-  @Test
-  public void createTableWithConsumedTest(){
-    assertNotNull(KieTableFactory.createTable("events", Consumed.with(Serdes.String(), Serdes.String())));
-  }
+    @Test
+    public void createTableWithConsumedTest() {
+        assertNotNull(KieTableFactory.createTable("events",
+                                                  Consumed.with(Serdes.String(),
+                                                                Serdes.String())));
+    }
 
-  @Test
-  public void createTableWithConsumedAndMaterializedTest(){
-    assertNotNull(KieTableFactory.createTable("events", Consumed.with(Serdes.String(), Serdes.String()), Materialized.with(Serdes.String(), Serdes.String())));
-  }
+    @Test
+    public void createTableWithConsumedAndMaterializedTest() {
+        assertNotNull(KieTableFactory.createTable("events",
+                                                  Consumed.with(Serdes.String(),
+                                                                Serdes.String()),
+                                                  Materialized.with(Serdes.String(),
+                                                                    Serdes.String())));
+    }
 
-  @Test
-  public void createGlobalTableTest(){
-    assertNotNull(KieTableFactory.createGlobalTable("events"));
-  }
+    @Test
+    public void createGlobalTableTest() {
+        assertNotNull(KieTableFactory.createGlobalTable("events"));
+    }
 
-  @Test
-  public void createGlobalTableWithConsumedTest(){
-    assertNotNull(KieTableFactory.createGlobalTable("events", Consumed.with(Serdes.String(), Serdes.String())));
-  }
+    @Test
+    public void createGlobalTableWithConsumedTest() {
+        assertNotNull(KieTableFactory.createGlobalTable("events",
+                                                        Consumed.with(Serdes.String(),
+                                                                      Serdes.String())));
+    }
 
-  @Test
-  public void createGlobalTableWithConsumedAndMaterializedTest(){
-    assertNotNull(KieTableFactory.createGlobalTable("events", Consumed.with(Serdes.String(), Serdes.String()), Materialized.with(Serdes.String(), Serdes.String())));
-  }
+    @Test
+    public void createGlobalTableWithConsumedAndMaterializedTest() {
+        assertNotNull(KieTableFactory.createGlobalTable("events",
+                                                        Consumed.with(Serdes.String(),
+                                                                      Serdes.String()),
+                                                        Materialized.with(Serdes.String(),
+                                                                          Serdes.String())));
+    }
 }

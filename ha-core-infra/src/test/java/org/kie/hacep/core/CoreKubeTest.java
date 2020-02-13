@@ -26,8 +26,9 @@ public class CoreKubeTest {
 
     @Test
     public void leaderElectionTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         election.stop();
@@ -35,8 +36,9 @@ public class CoreKubeTest {
 
     @Test
     public void lookupNewLeaderInfoTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         LeaderElectionImpl impl = (LeaderElectionImpl) election;
@@ -46,8 +48,9 @@ public class CoreKubeTest {
 
     @Test(expected = KubernetesClientException.class)
     public void pullClusterMembersTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         LeaderElectionImpl impl = (LeaderElectionImpl) election;
@@ -57,8 +60,9 @@ public class CoreKubeTest {
 
     @Test(expected = KubernetesClientException.class)
     public void pullConfigMapTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         LeaderElectionImpl impl = (LeaderElectionImpl) election;
@@ -68,68 +72,78 @@ public class CoreKubeTest {
 
     @Test
     public void refreshStatusTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         LeaderElectionImpl impl = (LeaderElectionImpl) election;
-        impl.refreshStatus();;
+        impl.refreshStatus();
+        ;
         election.stop();
     }
 
     @Test
     public void refreshStatusBecomingLeaderTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         LeaderElectionImpl impl = (LeaderElectionImpl) election;
-        impl.refreshStatusBecomingLeader();;
+        impl.refreshStatusBecomingLeader();
+        ;
         election.stop();
     }
 
     @Test
     public void refreshStatusLeaderTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         LeaderElectionImpl impl = (LeaderElectionImpl) election;
-        impl.refreshStatusLeader();;
+        impl.refreshStatusLeader();
+        ;
         election.stop();
     }
 
     @Test
     public void refreshStatusNotLeaderTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         LeaderElectionImpl impl = (LeaderElectionImpl) election;
-        impl.refreshStatusNotLeader();;
+        impl.refreshStatusNotLeader();
+        ;
         election.stop();
     }
 
     @Test
     public void rescheduleAfterDelayTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         LeaderElectionImpl impl = (LeaderElectionImpl) election;
-        impl.rescheduleAfterDelay();;
+        impl.rescheduleAfterDelay();
+        ;
         election.stop();
     }
 
     @Test
     public void tryAcquireLeadershipTest() {
-        CoreKube kube = new CoreKube("default", null);
-        LeaderElection election =kube.getLeaderElection();
+        CoreKube kube = new CoreKube("default",
+                                     null);
+        LeaderElection election = kube.getLeaderElection();
         assertNotNull(election);
         election.start();
         LeaderElectionImpl impl = (LeaderElectionImpl) election;
         impl.tryAcquireLeadership();
         election.stop();
     }
-
 }

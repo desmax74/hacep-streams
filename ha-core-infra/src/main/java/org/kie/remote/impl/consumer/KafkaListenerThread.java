@@ -36,65 +36,72 @@ import org.slf4j.LoggerFactory;
 
 public class KafkaListenerThread implements ListenerThread {
 
-  private static Logger logger = LoggerFactory.getLogger(KafkaListenerThread.class);
-  private TopicsConfig topicsConfig;
-  private Map<String, CompletableFuture<Object>> requestsStore;
-  private KafkaConsumer consumer;
+    private static Logger logger = LoggerFactory.getLogger(KafkaListenerThread.class);
+    private TopicsConfig topicsConfig;
+    private Map<String, CompletableFuture<Object>> requestsStore;
+    private KafkaConsumer consumer;
 
-  private volatile boolean running = true;
+    private volatile boolean running = true;
 
-  public KafkaListenerThread(Properties configuration, TopicsConfig config) {
-    this.topicsConfig = config;
-    consumer = InfraFactory.getConsumer(topicsConfig.getKieSessionInfosTopicName(), configuration);
-  }
-
-  public void init(Map<String, CompletableFuture<Object>> requestsStore){
-    this.requestsStore = requestsStore;
-  }
-
-  @Override
-  public void run() {
-    if(requestsStore == null){
-      throw new InitializeException("Request store not initialized");
+    public KafkaListenerThread(Properties configuration,
+                               TopicsConfig config) {
+        this.topicsConfig = config;
+        consumer = InfraFactory.getConsumer(topicsConfig.getKieSessionInfosTopicName(),
+                                            configuration);
     }
-    try {
-      while (running) {
-        ConsumerRecords records = consumer.poll(Duration.of(CommonConfig.DEFAULT_POLL_TIMEOUT_MS, ChronoUnit.MILLIS));
-        Iterator<ConsumerRecord<String, byte[]>> iterator = records.iterator();
-        while (iterator.hasNext()) {
-          ConsumerRecord<String, byte[]> record = iterator.next();
-          Object msg = SerializationUtil.deserialize(record.value());
-          if (msg instanceof ResultMessage) {
-            complete(requestsStore, (ResultMessage) msg, logger);
-          } else if (msg != null) {
-            throw new IllegalStateException("Wrong type of response message: found " +
-                                                    msg.getClass().getCanonicalName() +
-                                                    " instead of " +
-                                                    ResultMessage.class.getCanonicalName());
-          }
+
+    public void init(Map<String, CompletableFuture<Object>> requestsStore) {
+        this.requestsStore = requestsStore;
+    }
+
+    @Override
+    public void run() {
+        if (requestsStore == null) {
+            throw new InitializeException("Request store not initialized");
         }
-      }
-    } catch (Exception ex) {
-      logger.error(ex.getMessage(), ex);
-    } finally {
-      consumer.close();
+        try {
+            while (running) {
+                ConsumerRecords records = consumer.poll(Duration.of(CommonConfig.DEFAULT_POLL_TIMEOUT_MS,
+                                                                    ChronoUnit.MILLIS));
+                Iterator<ConsumerRecord<String, byte[]>> iterator = records.iterator();
+                while (iterator.hasNext()) {
+                    ConsumerRecord<String, byte[]> record = iterator.next();
+                    Object msg = SerializationUtil.deserialize(record.value());
+                    if (msg instanceof ResultMessage) {
+                        complete(requestsStore,
+                                 (ResultMessage) msg,
+                                 logger);
+                    } else if (msg != null) {
+                        throw new IllegalStateException("Wrong type of response message: found " +
+                                                                msg.getClass().getCanonicalName() +
+                                                                " instead of " +
+                                                                ResultMessage.class.getCanonicalName());
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(),
+                         ex);
+        } finally {
+            consumer.close();
+        }
     }
-  }
 
-  private void complete(Map<String, CompletableFuture<Object>> requestsStore,
-                        ResultMessage message,
-                        Logger logger) {
-    CompletableFuture<Object> completableFuture = requestsStore.get(message.getId());
-    if (completableFuture != null) {
-      completableFuture.complete(message.getResult());
-      if (logger.isDebugEnabled()) {
-        logger.debug("completed msg with key {}", message.getId());
-      }
+    private void complete(Map<String, CompletableFuture<Object>> requestsStore,
+                          ResultMessage message,
+                          Logger logger) {
+        CompletableFuture<Object> completableFuture = requestsStore.get(message.getId());
+        if (completableFuture != null) {
+            completableFuture.complete(message.getResult());
+            if (logger.isDebugEnabled()) {
+                logger.debug("completed msg with key {}",
+                             message.getId());
+            }
+        }
     }
-  }
 
-  @Override
-  public void stop() {
-    running = false;
-  }
+    @Override
+    public void stop() {
+        running = false;
+    }
 }

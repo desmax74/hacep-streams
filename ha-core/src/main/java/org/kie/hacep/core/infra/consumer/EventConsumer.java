@@ -19,9 +19,9 @@ import org.kie.hacep.core.infra.election.LeadershipCallback;
 
 public interface EventConsumer extends LeadershipCallback {
 
-  void initConsumer(ConsumerHandler consumerHandler);
+    void initConsumer(ConsumerHandler consumerHandler);
 
-  void poll();
+    void poll();
 
-  void stop();
+    void stop();
 }

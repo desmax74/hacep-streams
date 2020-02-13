@@ -22,22 +22,22 @@ import java.util.UUID;
 public class SnapshotOnDemandCommand extends AbstractCommand implements VisitableCommand,
                                                                         Serializable {
 
-  public SnapshotOnDemandCommand() {
-    super(UUID.randomUUID().toString());
-  }
+    public SnapshotOnDemandCommand() {
+        super(UUID.randomUUID().toString());
+    }
 
-  @Override
-  public boolean isPermittedForReplicas() {
-    return false;
-  }
+    @Override
+    public boolean isPermittedForReplicas() {
+        return false;
+    }
 
-  @Override
-  public void accept(VisitorCommand visitor) {
-    visitor.visit(this);
-  }
+    @Override
+    public void accept(VisitorCommand visitor) {
+        visitor.visit(this);
+    }
 
-  @Override
-  public String toString() {
-    return "SnapshotOnDemandCommand";
-  }
+    @Override
+    public String toString() {
+        return "SnapshotOnDemandCommand";
+    }
 }

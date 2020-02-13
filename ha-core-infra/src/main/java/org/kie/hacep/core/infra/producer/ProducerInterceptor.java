@@ -24,34 +24,39 @@ import org.slf4j.LoggerFactory;
 
 public class ProducerInterceptor implements org.apache.kafka.clients.producer.ProducerInterceptor {
 
-  private Logger logger = LoggerFactory.getLogger(ProducerInterceptor.class);
+    private Logger logger = LoggerFactory.getLogger(ProducerInterceptor.class);
 
-  public ProducerInterceptor(){
-    logger.info("Built ProducerInterceptor");
-  }
-
-  @Override
-  public ProducerRecord onSend(ProducerRecord producerRecord) {
-    logger.info("On send:{}", producerRecord);
-    return producerRecord;
-  }
-
-  @Override
-  public void onAcknowledgement(RecordMetadata recordMetadata, Exception e) {
-    if (e != null) {
-      logger.warn("Exception encountered producing record {}", e);
-    } else {
-      logger.info("record has been acknowledged {} ", recordMetadata);
+    public ProducerInterceptor() {
+        logger.info("Built ProducerInterceptor");
     }
-  }
 
-  @Override
-  public void close() {
-    logger.info("on close");
-  }
+    @Override
+    public ProducerRecord onSend(ProducerRecord producerRecord) {
+        logger.info("On send:{}",
+                    producerRecord);
+        return producerRecord;
+    }
 
-  @Override
-  public void configure(Map<String, ?> map) {
-    logger.info("config:{}", map);
-  }
+    @Override
+    public void onAcknowledgement(RecordMetadata recordMetadata,
+                                  Exception e) {
+        if (e != null) {
+            logger.warn("Exception encountered producing record {}",
+                        e);
+        } else {
+            logger.info("record has been acknowledged {} ",
+                        recordMetadata);
+        }
+    }
+
+    @Override
+    public void close() {
+        logger.info("on close");
+    }
+
+    @Override
+    public void configure(Map<String, ?> map) {
+        logger.info("config:{}",
+                    map);
+    }
 }

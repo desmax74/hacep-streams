@@ -17,8 +17,7 @@ package org.kie.hacep.exceptions;
 
 public class InitializeException extends RuntimeException {
 
-  public InitializeException(String msg) {
-    super(msg);
-  }
-
+    public InitializeException(String msg) {
+        super(msg);
+    }
 }

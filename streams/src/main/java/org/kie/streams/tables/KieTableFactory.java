@@ -23,35 +23,50 @@ import org.apache.kafka.streams.kstream.Materialized;
 
 public class KieTableFactory {
 
-  private KieTableFactory(){};
+    private KieTableFactory() {
+    }
 
-  public static KTable createTable(final String topic){
-    StreamsBuilder streamsBuilder = new StreamsBuilder();
-    return streamsBuilder.table(topic);
-  }
+    ;
 
-  public static KTable createTable(final String topic, final Consumed consumed){
-    StreamsBuilder streamsBuilder = new StreamsBuilder();
-    return streamsBuilder.table(topic, consumed);
-  }
+    public static KTable createTable(final String topic) {
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
+        return streamsBuilder.table(topic);
+    }
 
-  public static KTable createTable(final String topic, final Consumed consumed, final Materialized materialized){
-    StreamsBuilder streamsBuilder = new StreamsBuilder();
-    return streamsBuilder.table(topic, consumed, materialized);
-  }
+    public static KTable createTable(final String topic,
+                                     final Consumed consumed) {
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
+        return streamsBuilder.table(topic,
+                                    consumed);
+    }
 
-  public static GlobalKTable createGlobalTable(final String topic){
-    StreamsBuilder streamsBuilder = new StreamsBuilder();
-    return streamsBuilder.globalTable(topic);
-  }
+    public static KTable createTable(final String topic,
+                                     final Consumed consumed,
+                                     final Materialized materialized) {
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
+        return streamsBuilder.table(topic,
+                                    consumed,
+                                    materialized);
+    }
 
-  public static GlobalKTable createGlobalTable(final String topic, final Consumed consumed){
-    StreamsBuilder streamsBuilder = new StreamsBuilder();
-    return streamsBuilder.globalTable(topic, consumed);
-  }
+    public static GlobalKTable createGlobalTable(final String topic) {
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
+        return streamsBuilder.globalTable(topic);
+    }
 
-  public static GlobalKTable createGlobalTable(final String topic, final Consumed consumed, final Materialized materialized){
-    StreamsBuilder streamsBuilder = new StreamsBuilder();
-    return streamsBuilder.globalTable(topic, consumed, materialized);
-  }
+    public static GlobalKTable createGlobalTable(final String topic,
+                                                 final Consumed consumed) {
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
+        return streamsBuilder.globalTable(topic,
+                                          consumed);
+    }
+
+    public static GlobalKTable createGlobalTable(final String topic,
+                                                 final Consumed consumed,
+                                                 final Materialized materialized) {
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
+        return streamsBuilder.globalTable(topic,
+                                          consumed,
+                                          materialized);
+    }
 }

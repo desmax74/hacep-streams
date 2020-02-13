@@ -30,11 +30,13 @@ public class KieSerializer<T> implements Serializer<T> {
     }
 
     @Override
-    public void configure(Map<String, ?> map, boolean b) {
+    public void configure(Map<String, ?> map,
+                          boolean b) {
     }
 
     @Override
-    public byte[] serialize(String topic, T t) {
+    public byte[] serialize(String topic,
+                            T t) {
         byte[] serializedBytes = null;
         try {
             serializedBytes = objectMapper.writeValueAsBytes(t);

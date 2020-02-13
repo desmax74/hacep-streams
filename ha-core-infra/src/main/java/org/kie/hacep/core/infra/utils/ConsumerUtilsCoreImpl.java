@@ -34,24 +34,32 @@ import static org.kie.remote.util.SerializationUtil.deserialize;
 
 public class ConsumerUtilsCoreImpl implements ConsumerUtilsCore {
 
-  private Logger logger = LoggerFactory.getLogger(ConsumerUtilsCoreImpl.class);
+    private Logger logger = LoggerFactory.getLogger(ConsumerUtilsCoreImpl.class);
 
-  public ControlMessage getLastEvent(String topic, Integer pollTimeout) {
-    return getLastEvent(topic, Config.getConsumerConfig("LastEventConsumer"), pollTimeout);
-  }
-
-  public ControlMessage getLastEvent(String topic, Properties properties, Integer pollTimeout) {
-    ControlMessage lastMessage = new ControlMessage();
-    try(KafkaConsumer consumer = InfraFactory.getConsumer(topic, properties)) {
-      ConsumerRecords records = consumer.poll(Duration.of(pollTimeout, ChronoUnit.MILLIS));
-      Iterator<ConsumerRecord<String, byte[]>> iterator = records.iterator();
-      while(iterator.hasNext()){
-        ConsumerRecord<String, byte[]> record = iterator.next();
-        lastMessage = deserialize(record.value());
-      }
-    } catch (Exception ex) {
-      logger.error(ex.getMessage(), ex);
+    public ControlMessage getLastEvent(String topic,
+                                       Integer pollTimeout) {
+        return getLastEvent(topic,
+                            Config.getConsumerConfig("LastEventConsumer"),
+                            pollTimeout);
     }
-    return lastMessage;
-  }
+
+    public ControlMessage getLastEvent(String topic,
+                                       Properties properties,
+                                       Integer pollTimeout) {
+        ControlMessage lastMessage = new ControlMessage();
+        try (KafkaConsumer consumer = InfraFactory.getConsumer(topic,
+                                                               properties)) {
+            ConsumerRecords records = consumer.poll(Duration.of(pollTimeout,
+                                                                ChronoUnit.MILLIS));
+            Iterator<ConsumerRecord<String, byte[]>> iterator = records.iterator();
+            while (iterator.hasNext()) {
+                ConsumerRecord<String, byte[]> record = iterator.next();
+                lastMessage = deserialize(record.value());
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(),
+                         ex);
+        }
+        return lastMessage;
+    }
 }

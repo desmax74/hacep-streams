@@ -24,20 +24,21 @@ import org.slf4j.LoggerFactory;
 
 public class ClientUtils {
 
-  private ClientUtils(){}
-  private static Logger logger = LoggerFactory.getLogger(ClientUtils.class);
-
-  public static final String CONSUMER_CONF = "consumer.properties";
-  public static final String PRODUCER_CONF = "producer.properties";
-  public static final String CONF = "configuration.properties";
-
-  public static Properties getConfiguration(String filename) {
-    Properties props = new Properties();
-    try (InputStream in = ClientUtils.class.getClassLoader().getResourceAsStream(filename)) {
-      props.load(in);
-    } catch (IOException e) {
-      logger.error(e.getMessage(), e);
+    public static final String CONSUMER_CONF = "consumer.properties";
+    public static final String PRODUCER_CONF = "producer.properties";
+    public static final String CONF = "configuration.properties";
+    private static Logger logger = LoggerFactory.getLogger(ClientUtils.class);
+    private ClientUtils() {
     }
-    return props;
-  }
+
+    public static Properties getConfiguration(String filename) {
+        Properties props = new Properties();
+        try (InputStream in = ClientUtils.class.getClassLoader().getResourceAsStream(filename)) {
+            props.load(in);
+        } catch (IOException e) {
+            logger.error(e.getMessage(),
+                         e);
+        }
+        return props;
+    }
 }

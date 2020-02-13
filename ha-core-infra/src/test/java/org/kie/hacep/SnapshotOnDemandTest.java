@@ -86,13 +86,16 @@ public class SnapshotOnDemandTest {
 
         try {
             ConsumerRecords eventsRecords = eventsConsumer.poll(Duration.ofSeconds(2));
-            assertEquals(0, eventsRecords.count());
+            assertEquals(0,
+                         eventsRecords.count());
 
             ConsumerRecords controlRecords = controlConsumer.poll(Duration.ofSeconds(2));
-            assertEquals(0, controlRecords.count());
+            assertEquals(0,
+                         controlRecords.count());
 
             ConsumerRecords snapshotRecords = snapshotConsumer.poll(Duration.ofSeconds(2));
-            assertEquals(0, snapshotRecords.count());
+            assertEquals(0,
+                         snapshotRecords.count());
 
             KafkaUtils.insertSnapshotOnDemandCommand();
 
@@ -101,33 +104,39 @@ public class SnapshotOnDemandTest {
             while (messages.size() < 1) {
                 snapshotRecords = snapshotConsumer.poll(Duration.ofSeconds(5));
                 snapshotRecords.forEach(o -> {
-                    ConsumerRecord<String, byte[]> controlRecord = (ConsumerRecord<String,byte[]>)o;
+                    ConsumerRecord<String, byte[]> controlRecord = (ConsumerRecord<String, byte[]>) o;
                     SnapshotMessage snapshotMessage = deserialize(controlRecord.value());
                     messages.add(snapshotMessage);
                 });
 
                 int attemptNumber = attempts.incrementAndGet();
-                logger.warn("Attempt number:{}", attemptNumber);
-                if(attempts.get() == 10){
-                    throw new RuntimeException("No control message available after "+attempts + "attempts in waitForControlMessage");
+                logger.warn("Attempt number:{}",
+                            attemptNumber);
+                if (attempts.get() == 10) {
+                    throw new RuntimeException("No control message available after " + attempts + "attempts in waitForControlMessage");
                 }
             }
 
-            assertEquals(1, messages.size());
+            assertEquals(1,
+                         messages.size());
             Iterator<SnapshotMessage> messagesIter = messages.iterator();
             SnapshotMessage msg = messagesIter.next();
             assertNotNull(msg);
             assertTrue(msg.getFhManager().getFhMapKeys().isEmpty());
-            assertEquals(0, msg.getLastInsertedEventOffset());
+            assertEquals(0,
+                         msg.getLastInsertedEventOffset());
             assertNotNull(msg.getSerializedSession());
 
             eventsRecords = eventsConsumer.poll(Duration.ofSeconds(1));
-            assertEquals(1, eventsRecords.count());
+            assertEquals(1,
+                         eventsRecords.count());
 
             controlRecords = controlConsumer.poll(Duration.ofSeconds(1));
-            assertEquals(1, controlRecords.count());
+            assertEquals(1,
+                         controlRecords.count());
         } catch (Exception ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
+            throw new RuntimeException(ex.getMessage(),
+                                       ex);
         } finally {
             eventsConsumer.close();
             controlConsumer.close();

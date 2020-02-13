@@ -17,8 +17,10 @@ package org.kie.remote;
 
 import java.io.Closeable;
 
-public interface RemoteStreamingKieSession extends Closeable, RemoteStreamingEntryPoint, RemoteStatefulSession, UpdatableSession {
+public interface RemoteStreamingKieSession extends Closeable,
+                                                   RemoteStreamingEntryPoint,
+                                                   RemoteStatefulSession,
+                                                   UpdatableSession {
 
-  RemoteStreamingEntryPoint getEntryPoint(String name);
-
+    RemoteStreamingEntryPoint getEntryPoint(String name);
 }
