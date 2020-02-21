@@ -31,6 +31,7 @@
   </properties>
 
   <modules>
+    <module>streams</module>
     <module>ha-core-infra</module>
     <module>kie-remote</module>
     <module>hacep</module>
