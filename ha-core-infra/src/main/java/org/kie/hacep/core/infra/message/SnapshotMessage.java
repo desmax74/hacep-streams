@@ -26,58 +26,58 @@ import org.kie.remote.message.AbstractMessage;
 
 public class SnapshotMessage extends AbstractMessage implements Serializable {
 
-    private byte[] serializedSession;
-    private FactHandlesManager fhManager;
-    private String lastInsertedEventkey;
-    private long lastInsertedEventOffset;
-    private LocalDateTime time;
-    private String kjarGAV;
+  private byte[] serializedSession;
+  private FactHandlesManager fhManager;
+  private String lastInsertedEventkey;
+  private long lastInsertedEventOffset;
+  private LocalDateTime time;
+  private String kjarGAV;
 
-    /* Empty constructor for serialization */
-    public SnapshotMessage() {
-    }
+  /* Empty constructor for serialization */
+  public SnapshotMessage() { }
 
-    public SnapshotMessage(String id,
-                           String kjarGAV,
-                           byte[] serializedSession,
-                           FactHandlesManager fhManager,
-                           String lastInsertedEventkey,
-                           long lastInsertedEventOffset,
-                           LocalDateTime time) {
-        super(id);
-        this.serializedSession = serializedSession;
-        this.fhManager = fhManager;
-        this.lastInsertedEventkey = lastInsertedEventkey;
-        this.lastInsertedEventOffset = lastInsertedEventOffset;
-        this.time = time;
-        this.kjarGAV = kjarGAV;
-    }
+  public SnapshotMessage(String id,
+                         String kjarGAV,
+                         byte[] serializedSession,
+                         FactHandlesManager fhManager,
+                         String lastInsertedEventkey,
+                         long lastInsertedEventOffset,
+                         LocalDateTime time) {
+    super(id);
+    this.serializedSession = serializedSession;
+    this.fhManager = fhManager;
+    this.lastInsertedEventkey = lastInsertedEventkey;
+    this.lastInsertedEventOffset = lastInsertedEventOffset;
+    this.time = time;
+    this.kjarGAV = kjarGAV;
+  }
 
-    public byte[] getSerializedSession() {
-        return serializedSession;
-    }
+  public byte[] getSerializedSession() {
+    return serializedSession;
+  }
 
-    public FactHandlesManager getFhManager() {
-        return fhManager;
-    }
+  public FactHandlesManager getFhManager() {
+    return fhManager;
+  }
 
-    public Set<RemoteFactHandle> getFhMapKeys() {
-        return fhManager.getFhMapKeys();
-    }
+  public Set<RemoteFactHandle> getFhMapKeys() {
+    return fhManager.getFhMapKeys();
+  }
 
-    public String getLastInsertedEventkey() {
-        return lastInsertedEventkey;
-    }
+  public String getLastInsertedEventkey() {
+    return lastInsertedEventkey;
+  }
 
-    public long getLastInsertedEventOffset() {
-        return lastInsertedEventOffset;
-    }
+  public long getLastInsertedEventOffset() {
+    return lastInsertedEventOffset;
+  }
 
-    public LocalDateTime getTime() {
-        return time;
-    }
+  public LocalDateTime getTime() {
+    return time;
+  }
 
-    public String getKjarGAV() {
-        return kjarGAV;
-    }
+  public String getKjarGAV() {
+    return kjarGAV;
+  }
+
 }

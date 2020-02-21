@@ -33,30 +33,23 @@ import org.kie.remote.impl.producer.Producer;
 import static org.junit.Assert.*;
 import static org.kie.remote.CommonConfig.getTestProperties;
 
-public class RemoteStreamingKieSessionImplTest extends KafkaFullTopicsTests {
+public class RemoteStreamingKieSessionImplTest extends KafkaFullTopicsTests{
 
     @Test
     public void getFactCountTest() throws Exception {
         Properties props = getTestProperties();
         Bootstrap.startEngine(envConfig);
         Bootstrap.getConsumerController().getCallback().updateStatus(State.LEADER);
-        kafkaServerTest.insertBatchStockTicketEvent(7,
-                                                    topicsConfig,
-                                                    RemoteStreamingKieSession.class,
-                                                    InfraFactory.getListener(props,
-                                                                             false));
-        Producer prod = InfraFactory.getProducer(false);
+        kafkaServerTest.insertBatchStockTicketEvent(7, topicsConfig, RemoteStreamingKieSession.class, InfraFactory.getListener(props, false));
         RemoteStreamingKieSessionImpl client = new RemoteStreamingKieSessionImpl(Config.getProducerConfig("FactCountConsumerTest"),
                                                                                  topicsConfig,
-                                                                                 InfraFactory.getListener(props,
-                                                                                                          false),
-                                                                                 prod);
+                                                                                 InfraFactory.getListener(props, false),
+                                                                                 InfraFactory.getProducer(false));
         try {
             CompletableFuture<Long> factCountFuture = client.getFactCount();
-            Long factCount = factCountFuture.get(5,
-                                                 TimeUnit.SECONDS);
+            Long factCount = factCountFuture.get(5, TimeUnit.SECONDS);
             assertTrue(factCount == 7);
-        } finally {
+        }finally {
             client.close();
         }
     }
@@ -66,25 +59,17 @@ public class RemoteStreamingKieSessionImplTest extends KafkaFullTopicsTests {
         Properties props = getTestProperties();
         Bootstrap.startEngine(envConfig);
         Bootstrap.getConsumerController().getCallback().updateStatus(State.LEADER);
-        kafkaServerTest.insertBatchStockTicketEvent(1,
-                                                    topicsConfig,
-                                                    RemoteStreamingKieSession.class,
-                                                    InfraFactory.getListener(props,
-                                                                             false));
+        kafkaServerTest.insertBatchStockTicketEvent(1, topicsConfig, RemoteStreamingKieSession.class, InfraFactory.getListener(props, false));
         Producer prod = InfraFactory.getProducer(false);
         RemoteStreamingKieSessionImpl client = new RemoteStreamingKieSessionImpl(CommonConfig.getProducerConfig(),
-                                                                                 topicsConfig,
-                                                                                 InfraFactory.getListener(props,
-                                                                                                          false),
-                                                                                 prod);
+                                                                                 topicsConfig, InfraFactory.getListener(props, false), prod);
         try {
             CompletableFuture<Collection> listKieObjectsFuture = client.getObjects();
-            Collection listKieObjects = listKieObjectsFuture.get(5,
-                                                                 TimeUnit.SECONDS);
+            Collection listKieObjects = listKieObjectsFuture.get(5, TimeUnit.SECONDS);
             assertTrue(listKieObjects.size() == 1);
             StockTickEvent event = (StockTickEvent) listKieObjects.iterator().next();
             assertTrue(event.getCompany().equals("RHT"));
-        } finally {
+        }finally {
             client.close();
         }
     }
@@ -94,25 +79,17 @@ public class RemoteStreamingKieSessionImplTest extends KafkaFullTopicsTests {
         Properties props = getTestProperties();
         Bootstrap.startEngine(envConfig);
         Bootstrap.getConsumerController().getCallback().updateStatus(State.LEADER);
-        kafkaServerTest.insertBatchStockTicketEvent(1,
-                                                    topicsConfig,
-                                                    RemoteStreamingKieSession.class,
-                                                    InfraFactory.getListener(props,
-                                                                             false));
+        kafkaServerTest.insertBatchStockTicketEvent(1, topicsConfig, RemoteStreamingKieSession.class, InfraFactory.getListener(props, false));
         Producer prod = InfraFactory.getProducer(false);
         RemoteStreamingKieSessionImpl client = new RemoteStreamingKieSessionImpl(Config.getProducerConfig("ListKieSessionObjectsWithClassTypeTest"),
-                                                                                 topicsConfig,
-                                                                                 InfraFactory.getListener(props,
-                                                                                                          false),
-                                                                                 prod);
+                                                                                 topicsConfig, InfraFactory.getListener(props, false), prod);
         try {
             CompletableFuture<Collection<StockTickEvent>> listKieObjectsFuture = client.getObjects(StockTickEvent.class);
-            Collection<? extends Object> listKieObjects = listKieObjectsFuture.get(5,
-                                                                                   TimeUnit.SECONDS);
+            Collection<? extends Object> listKieObjects = listKieObjectsFuture.get(5, TimeUnit.SECONDS);
             assertTrue(listKieObjects.size() == 1);
             StockTickEvent event = (StockTickEvent) listKieObjects.iterator().next();
             assertTrue(event.getCompany().equals("RHT"));
-        } finally {
+        }finally {
             client.close();
         }
     }
@@ -122,45 +99,29 @@ public class RemoteStreamingKieSessionImplTest extends KafkaFullTopicsTests {
         Properties props = getTestProperties();
         Bootstrap.startEngine(envConfig);
         Bootstrap.getConsumerController().getCallback().updateStatus(State.LEADER);
-        kafkaServerTest.insertBatchStockTicketEvent(1,
-                                                    topicsConfig,
-                                                    RemoteStreamingKieSession.class,
-                                                    InfraFactory.getListener(props,
-                                                                             false));
+        kafkaServerTest.insertBatchStockTicketEvent(1, topicsConfig, RemoteStreamingKieSession.class, InfraFactory.getListener(props, false));
         Producer prod = InfraFactory.getProducer(false);
         RemoteStreamingKieSessionImpl client = new RemoteStreamingKieSessionImpl(Config.getProducerConfig("ListKieSessionObjectsWithNamedQueryTest"),
-                                                                                 topicsConfig,
-                                                                                 InfraFactory.getListener(props,
-                                                                                                          false),
-                                                                                 prod);
-        try {
+                                                                                 topicsConfig, InfraFactory.getListener(props, false), prod);
+        try{
 
-            doQuery(client,
-                    "IBM",
-                    0);
+            doQuery( client, "IBM", 0 );
 
-            Collection<?> listKieObjects = doQuery(client,
-                                                   "RHT",
-                                                   1);
-            StockTickEvent event = (StockTickEvent) listKieObjects.iterator().next();
+            Collection<?> listKieObjects = doQuery( client, "RHT", 1 );
+            StockTickEvent event = (StockTickEvent)listKieObjects.iterator().next();
             assertTrue(event.getCompany().equals("RHT"));
-        } finally {
+        }finally {
             client.close();
         }
     }
 
-    private Collection<?> doQuery(RemoteStreamingKieSessionImpl client,
-                                  String stockName,
-                                  int expectedResult) throws InterruptedException, java.util.concurrent.ExecutionException, java.util.concurrent.TimeoutException {
+    private Collection<?> doQuery( RemoteStreamingKieSessionImpl client, String stockName, int expectedResult) throws InterruptedException, java.util.concurrent.ExecutionException, java.util.concurrent.TimeoutException {
         CompletableFuture<Collection> listKieObjectsFuture;
         Collection listKieObjects;
-        listKieObjectsFuture = client.getObjects("stockTickEventQuery",
-                                                 "stock",
-                                                 stockName);
-        listKieObjects = listKieObjectsFuture.get(10,
-                                                  TimeUnit.SECONDS);
-        assertEquals(expectedResult,
-                     listKieObjects.size());
+        listKieObjectsFuture = client.getObjects("stockTickEventQuery" , "stock", stockName);
+        listKieObjects = listKieObjectsFuture.get(10, TimeUnit.SECONDS);
+        assertEquals(expectedResult, listKieObjects.size());
         return listKieObjects;
     }
+
 }

@@ -51,15 +51,11 @@ public class LocalStorageKieSessionTest {
         EnvConfig config = EnvConfig.getDefaultEnvConfig().underTest(true).local(true);
         Bootstrap.startEngine(config);
         Bootstrap.getConsumerController().getCallback().updateStatus(State.LEADER);
-        ListenerThread listenerThread = InfraFactory.getListenerThread(TopicsConfig.getDefaultTopicsConfig(),
-                                                                       config.isLocal(),
-                                                                       getTestProperties());
-        Listener listener = new Listener(getTestProperties(),
-                                         listenerThread);
-        session = InfraFactory.createRemoteKieSession(CommonConfig.getTestProperties(),
-                                                      listener,
-                                                      InfraFactory.getProducer(config.isLocal())); //RemoteKieSession.create(getTestProperties());
+        ListenerThread listenerThread = InfraFactory.getListenerThread(TopicsConfig.getDefaultTopicsConfig(), config.isLocal(), getTestProperties());
+        Listener listener = new Listener(getTestProperties(), listenerThread);
+        session = InfraFactory.createRemoteKieSession(CommonConfig.getTestProperties(), listener, InfraFactory.getProducer(config.isLocal())); //RemoteKieSession.create(getTestProperties());
     }
+
 
     @After
     public void endTest() throws IOException {
@@ -70,96 +66,73 @@ public class LocalStorageKieSessionTest {
     @Test(timeout = 10000)
     public void insertTest() throws ExecutionException, InterruptedException {
 
-        assertEquals((Long) 0L,
-                     session.getFactCount().get());
-        assertEquals((Long) 0L,
-                     session.fireAllRules().get());
+        assertEquals((Long) 0L, session.getFactCount().get());
+        assertEquals((Long) 0L, session.fireAllRules().get());
 
         RemoteFactHandle<Result> resultRFH = session.insert(new Result("RHT"));
-        assertEquals((Long) 0L,
-                     session.fireAllRules().get());
+        assertEquals((Long) 0L, session.fireAllRules().get());
 
-        RemoteFactHandle<StockTickEvent> stockRFH = session.insert(new StockTickEvent("RHT",
-                                                                                      9.0));
-        session.insert(new StockTickEvent("RHT",
-                                          14.0));
+        RemoteFactHandle<StockTickEvent> stockRFH = session.insert(new StockTickEvent("RHT", 9.0));
+        session.insert(new StockTickEvent("RHT", 14.0));
 
         assertFalse(session.getObject(stockRFH).get().isProcessed());
 
-        assertEquals((Long) 3L,
-                     session.getFactCount().get());
-        assertEquals((Long) 3L,
-                     session.fireAllRules().get());
+        assertEquals((Long) 3L, session.getFactCount().get());
+        assertEquals((Long) 3L, session.fireAllRules().get());
 
         assertTrue(session.getObject(stockRFH).get().isProcessed());
 
-        Assert.assertEquals(11.5,
-                            session.getObject(resultRFH).get().getValue());
+        Assert.assertEquals(11.5, session.getObject(resultRFH).get().getValue());
     }
 
     @Test(timeout = 10000)
     public void updateTest() throws ExecutionException, InterruptedException {
 
-        assertEquals((Long) 0L,
-                     session.getFactCount().get());
-        assertEquals((Long) 0L,
-                     session.fireAllRules().get());
+        assertEquals((Long) 0L, session.getFactCount().get());
+        assertEquals((Long) 0L, session.fireAllRules().get());
 
-        StockTickEvent stock = new StockTickEvent("RHT",
-                                                  9.0);
+        StockTickEvent stock = new StockTickEvent("RHT", 9.0);
         RemoteFactHandle<StockTickEvent> stockRFH = session.insert(stock);
 
         assertFalse(session.getObject(stockRFH).get().isProcessed());
 
-        assertEquals((Long) 1L,
-                     session.fireAllRules().get());
+        assertEquals((Long) 1L, session.fireAllRules().get());
 
         assertTrue(session.getObject(stockRFH).get().isProcessed());
 
         stock.setPrice(10.0);
-        session.update(stockRFH,
-                       stock);
+        session.update(stockRFH, stock);
 
-        Assert.assertEquals(stock.getPrice(),
-                            session.getObject(stockRFH).get().getPrice(),
-                            0.1);
+        Assert.assertEquals(stock.getPrice(), session.getObject(stockRFH).get().getPrice(), 0.1);
     }
 
     @Test(timeout = 10000)
     public void deleteTest() throws ExecutionException, InterruptedException {
 
-        assertEquals((Long) 0L,
-                     session.getFactCount().get());
-        assertEquals((Long) 0L,
-                     session.fireAllRules().get());
+        assertEquals((Long) 0L, session.getFactCount().get());
+        assertEquals((Long) 0L, session.fireAllRules().get());
 
-        StockTickEvent stock = new StockTickEvent("RHT",
-                                                  9.0);
+        StockTickEvent stock = new StockTickEvent("RHT", 9.0);
         RemoteFactHandle<StockTickEvent> stockRFH = session.insert(stock);
 
         assertFalse(session.getObject(stockRFH).get().isProcessed());
 
-        assertEquals((Long) 1L,
-                     session.fireAllRules().get());
+        assertEquals((Long) 1L, session.fireAllRules().get());
 
         assertTrue(session.getObject(stockRFH).get().isProcessed());
 
-        assertEquals((Long) 1L,
-                     session.getFactCount().get());
+        assertEquals((Long) 1L, session.getFactCount().get());
         session.delete(stockRFH);
-        assertEquals((Long) 0L,
-                     session.getFactCount().get());
+        assertEquals((Long) 0L, session.getFactCount().get());
     }
 
     @Test(timeout = 10000)
     public void fireUntilHaltTest() throws ExecutionException, InterruptedException {
 
-        assertEquals((Long) 0L,
-                     session.getFactCount().get());
+        assertEquals((Long) 0L, session.getFactCount().get());
         session.fireUntilHalt();
 
-        StockTickEvent stock1 = new StockTickEvent("RHT",
-                                                   9.0);
+        StockTickEvent stock1 = new StockTickEvent("RHT", 9.0);
         assertFalse(stock1.isProcessed());
 
         RemoteFactHandle<StockTickEvent> stock1RFH = session.insert(stock1);
@@ -168,16 +141,14 @@ public class LocalStorageKieSessionTest {
 
         session.halt();
 
-        StockTickEvent stock2 = new StockTickEvent("RHT",
-                                                   11.0);
+        StockTickEvent stock2 = new StockTickEvent("RHT", 11.0);
         assertFalse(stock2.isProcessed());
 
         RemoteFactHandle<StockTickEvent> stock2RFH = session.insert(stock2);
 
         assertFalse(session.getObject(stock2RFH).get().isProcessed());
 
-        assertEquals((Long) 1L,
-                     session.fireAllRules().get());
+        assertEquals((Long) 1L, session.fireAllRules().get());
 
         assertTrue(session.getObject(stock2RFH).get().isProcessed());
     }
@@ -185,39 +156,26 @@ public class LocalStorageKieSessionTest {
     @Test(timeout = 10000)
     public void getCommandsTest() throws ExecutionException, InterruptedException {
 
-        RemoteFactHandle<StockTickEvent> stock1FH = session.insert(new StockTickEvent("RHT",
-                                                                                      9.0));
-        session.insert(new StockTickEvent("RHT",
-                                          19.0));
+        RemoteFactHandle<StockTickEvent> stock1FH = session.insert(new StockTickEvent("RHT", 9.0));
+        session.insert(new StockTickEvent("RHT", 19.0));
 
         Collection<StockTickEvent> getObjectsByClass = session.getObjects(StockTickEvent.class).get();
-        assertEquals(2,
-                     getObjectsByClass.size());
+        assertEquals(2, getObjectsByClass.size());
 
         Collection<?> getObjects = session.getObjects().get();
-        assertEquals(2,
-                     getObjects.size());
+        assertEquals(2, getObjects.size());
 
-        CompletableFuture<Collection> getObjectByQueryIBM = session.getObjects("stockTickEventQuery",
-                                                                               "stock",
-                                                                               "IBM");
-        assertEquals(0,
-                     getObjectByQueryIBM.get().size());
-        CompletableFuture<Collection> getObjectsByQueryRHT = session.getObjects("stockTickEventQuery",
-                                                                                "stock",
-                                                                                "RHT");
-        assertEquals(2,
-                     getObjectsByQueryRHT.get().size());
+        CompletableFuture<Collection> getObjectByQueryIBM = session.getObjects("stockTickEventQuery", "stock", "IBM");
+        assertEquals(0, getObjectByQueryIBM.get().size());
+        CompletableFuture<Collection> getObjectsByQueryRHT = session.getObjects("stockTickEventQuery", "stock", "RHT");
+        assertEquals(2, getObjectsByQueryRHT.get().size());
 
-        Assert.assertEquals("RHT",
-                            session.getObject(stock1FH).get().getCompany());
+        Assert.assertEquals("RHT", session.getObject(stock1FH).get().getCompany());
 
         RemoteEntryPoint defaultEntryPoint = session.getEntryPoint(DEFAULT_ENTRY_POINT);
-        assertEquals((Long) 2L,
-                     defaultEntryPoint.getFactCount().get());
+        assertEquals((Long) 2L, defaultEntryPoint.getFactCount().get());
 
-        assertEquals(DEFAULT_ENTRY_POINT,
-                     defaultEntryPoint.getEntryPointId());
+        assertEquals(DEFAULT_ENTRY_POINT, defaultEntryPoint.getEntryPointId());
     }
 
     @Test(timeout = 10000)
@@ -225,7 +183,7 @@ public class LocalStorageKieSessionTest {
         CompletableFuture<String> cfGav = session.getKJarGAV();
         String gav = cfGav.get();
         assertNotNull(gav);
-        assertEquals("KJar GAV NotDefined",
-                     gav);
+        assertEquals("KJar GAV NotDefined", gav);
     }
+
 }

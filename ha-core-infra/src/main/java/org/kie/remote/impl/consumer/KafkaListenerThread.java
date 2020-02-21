@@ -25,6 +25,7 @@ import java.util.concurrent.CompletableFuture;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+
 import org.kie.hacep.core.InfraFactory;
 import org.kie.hacep.exceptions.InitializeException;
 import org.kie.remote.CommonConfig;
@@ -43,8 +44,7 @@ public class KafkaListenerThread implements ListenerThread {
 
     private volatile boolean running = true;
 
-    public KafkaListenerThread(Properties configuration,
-                               TopicsConfig config) {
+    public KafkaListenerThread(Properties configuration, TopicsConfig config) {
         this.topicsConfig = config;
         consumer = InfraFactory.getConsumer(topicsConfig.getKieSessionInfosTopicName(),
                                             configuration);
@@ -57,7 +57,7 @@ public class KafkaListenerThread implements ListenerThread {
     @Override
     public void run() {
         if (requestsStore == null) {
-            throw new InitializeException("Request store not initialized");
+            throw new InitializeException("Request store not initialized, init method must be called before run the thread");
         }
         try {
             while (running) {
@@ -87,9 +87,7 @@ public class KafkaListenerThread implements ListenerThread {
         }
     }
 
-    private void complete(Map<String, CompletableFuture<Object>> requestsStore,
-                          ResultMessage message,
-                          Logger logger) {
+    public void complete(Map<String, CompletableFuture<Object>> requestsStore, ResultMessage message, Logger logger) {
         CompletableFuture<Object> completableFuture = requestsStore.get(message.getId());
         if (completableFuture != null) {
             completableFuture.complete(message.getResult());

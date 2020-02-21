@@ -25,32 +25,27 @@ import static org.junit.Assert.*;
 public class KubernetesLockConfigurationTest {
 
     @Test
-    public void constructorTest() {
+    public void constructorTest(){
         KubernetesLockConfiguration configuration = new KubernetesLockConfiguration("default");
         assertNotNull(configuration);
         assertTrue(configuration.getClusterLabels().isEmpty());
-        assertEquals("default-leaders",
-                     configuration.getConfigMapName());
+        assertEquals("default-leaders",configuration.getConfigMapName());
 
         assertNull(configuration.getGroupName());
         configuration.setGroupName("Group test");
-        assertEquals("Group test",
-                     configuration.getGroupName());
+        assertEquals("Group test", configuration.getGroupName());
 
         assertNull(configuration.getPodName());
         configuration.setPodName("Pod test");
-        assertEquals("Pod test",
-                     configuration.getPodName());
+        assertEquals("Pod test",configuration.getPodName());
 
         assertNull(configuration.getKubernetesResourcesNamespace());
         configuration.setKubernetesResourcesNamespace("Resource name Test");
-        assertEquals("Resource name Test",
-                     configuration.getKubernetesResourcesNamespace());
+        assertEquals("Resource name Test", configuration.getKubernetesResourcesNamespace());
 
         assertTrue(configuration.getClusterLabels().isEmpty());
         Map map = new HashMap();
-        map.put("key",
-                "value");
+        map.put("key", "value");
         configuration.setClusterLabels(map);
         assertFalse(configuration.getClusterLabels().isEmpty());
 

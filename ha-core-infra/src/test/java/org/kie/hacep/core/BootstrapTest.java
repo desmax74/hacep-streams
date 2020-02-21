@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 public class BootstrapTest {
 
     @Test
-    public void startUnderTestTest() {
+    public void startUnderTestTest(){
         EnvConfig envConfig = EnvConfig.getDefaultEnvConfig();
         envConfig.underTest(true);
         envConfig.local(true);
@@ -34,7 +34,7 @@ public class BootstrapTest {
     }
 
     @Test
-    public void startTest() {
+    public void startTest(){
         EnvConfig envConfig = EnvConfig.getDefaultEnvConfig();
         envConfig.underTest(false);
         envConfig.local(true);
@@ -44,7 +44,7 @@ public class BootstrapTest {
     }
 
     @Test
-    public void stopUnderTestTest() {
+    public void stopUnderTestTest(){
         EnvConfig envConfig = EnvConfig.getDefaultEnvConfig();
         envConfig.underTest(true);
         envConfig.local(true);
@@ -56,7 +56,7 @@ public class BootstrapTest {
     }
 
     @Test
-    public void stopTest() {
+    public void stopTest(){
         EnvConfig envConfig = EnvConfig.getDefaultEnvConfig();
         envConfig.underTest(false);
         envConfig.local(true);
@@ -66,4 +66,5 @@ public class BootstrapTest {
         Bootstrap.stopEngine();
         assertNull(Bootstrap.getConsumerController());
     }
+
 }

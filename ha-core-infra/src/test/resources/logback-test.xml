@@ -13,14 +13,17 @@
     </encoder>
   </appender>
 
+
+
+
   <appender name="KafkaAppender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
     <encoder>
       <pattern>%msg</pattern>
     </encoder>
 
     <topic>testlogs</topic>
-    <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.HostNameKeyingStrategy"/>
-    <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
+    <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.HostNameKeyingStrategy" />
+    <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy" />
 
     <producerConfig>bootstrap.servers=localhost:9092</producerConfig>
   </appender>
@@ -48,7 +51,9 @@
     <appender-ref ref="STDOUT"/>
   </logger>
 
+
+
   <root level="warn">
-    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="STDOUT" />
   </root>
 </configuration>

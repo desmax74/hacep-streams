@@ -25,10 +25,9 @@ import static org.junit.Assert.*;
 public class ConsumerUtilsCoreTest {
 
     @Test()
-    public void lastEventWithoutKafkaUptest() {
+    public void lastEventWithoutKafkaUpTest(){
         ConsumerUtilsCore consumerUtilsCore = new ConsumerUtilsCoreImpl();
-        ControlMessage msg = consumerUtilsCore.getLastEvent(Config.DEFAULT_CONTROL_TOPIC,
-                                                            1000);
+        ControlMessage msg = consumerUtilsCore.getLastEvent(Config.DEFAULT_CONTROL_TOPIC, 1000);
         assertNotNull(msg);
         assertTrue(msg.getOffset() == 0);
         assertNull(msg.getSideEffects());

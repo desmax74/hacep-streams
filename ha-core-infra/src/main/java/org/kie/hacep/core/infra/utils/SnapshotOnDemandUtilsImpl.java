@@ -53,12 +53,9 @@ public class SnapshotOnDemandUtilsImpl {
 
     private static final Logger logger = LoggerFactory.getLogger(SnapshotOnDemandUtilsImpl.class);
 
-    private SnapshotOnDemandUtilsImpl() {
-    }
+    private SnapshotOnDemandUtilsImpl() { }
 
-    public static SnapshotInfos askASnapshotOnDemand(EnvConfig config,
-                                                     SessionSnapshooter snapshooter,
-                                                     Producer producer) {
+    public static SnapshotInfos askASnapshotOnDemand(EnvConfig config, SessionSnapshooter snapshooter, Producer producer) {
         LocalDateTime infosTime = snapshooter.getLastSnapshotTime();
         LocalDateTime limitAge = LocalDateTime.now().minusSeconds(config.getMaxSnapshotAge());
         if (infosTime != null && limitAge.isBefore(infosTime)) { //included in the max age
@@ -70,32 +67,22 @@ public class SnapshotOnDemandUtilsImpl {
             if (logger.isInfoEnabled()) {
                 logger.info("Build NewSnapshotOnDemand ");
             }
-            return buildNewSnapshotOnDemand(config,
-                                            limitAge,
-                                            producer);
+            return buildNewSnapshotOnDemand(config, limitAge, producer);
         }
     }
 
-    private static SnapshotInfos buildNewSnapshotOnDemand(EnvConfig envConfig,
-                                                          LocalDateTime limitAge,
-                                                          Producer producer) {
-        SnapshotMessage snapshotMsg = askAndReadSnapshotOnDemand(envConfig,
-                                                                 limitAge,
-                                                                 producer);
+    private static SnapshotInfos buildNewSnapshotOnDemand(EnvConfig envConfig, LocalDateTime limitAge, Producer producer) {
+        SnapshotMessage snapshotMsg = askAndReadSnapshotOnDemand(envConfig, limitAge, producer);
         KieSession kSession = null;
         KieContainer kieContainer = null;
         try (ByteArrayInputStream in = new ByteArrayInputStream(snapshotMsg.getSerializedSession())) {
             KieServices ks = KieServices.get();
-            kieContainer = KieContainerUtils.getKieContainer(envConfig,
-                                                             ks);
+            kieContainer = KieContainerUtils.getKieContainer(envConfig, ks);
             KieSessionConfiguration conf = ks.newKieSessionConfiguration();
             conf.setOption(ClockTypeOption.get("pseudo"));
-            kSession = ks.getMarshallers().newMarshaller(kieContainer.getKieBase()).unmarshall(in,
-                                                                                               conf,
-                                                                                               null);
+            kSession = ks.getMarshallers().newMarshaller(kieContainer.getKieBase()).unmarshall(in, conf, null);
         } catch (IOException | ClassNotFoundException e) {
-            throw new SnapshotOnDemandException(e.getMessage(),
-                                                e);
+            throw new SnapshotOnDemandException(e.getMessage(), e);
         }
         return new SnapshotInfos(kSession,
                                  kieContainer,
@@ -110,11 +97,9 @@ public class SnapshotOnDemandUtilsImpl {
                                                               LocalDateTime limitAge,
                                                               Producer producer) {
         Properties props = Config.getProducerConfig("SnapshotOnDemandUtils.askASnapshotOnDemand");
-        Sender sender = new Sender(props,
-                                   producer);
+        Sender sender = new Sender(props, producer);
         sender.start();
-        sender.sendCommand(new SnapshotOnDemandCommand(),
-                           TopicsConfig.getDefaultTopicsConfig().getEventsTopicName());
+        sender.sendCommand(new SnapshotOnDemandCommand(), TopicsConfig.getDefaultTopicsConfig().getEventsTopicName());
         sender.stop();
         KafkaConsumer consumer = getConfiguredSnapshotConsumer(envConfig);
         boolean snapshotReady = false;
@@ -157,8 +142,7 @@ public class SnapshotOnDemandUtilsImpl {
 
         if (partitionsInfo != null) {
             for (PartitionInfo partition : partitionsInfo) {
-                TopicPartition topicPartition = new TopicPartition(partition.topic(),
-                                                                   partition.partition());
+                TopicPartition topicPartition = new TopicPartition(partition.topic(), partition.partition());
                 partitionCollection.add(topicPartition);
             }
             if (!partitionCollection.isEmpty()) {

@@ -30,7 +30,6 @@ import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import org.kie.hacep.core.GlobalStatus;
-import org.kie.hacep.exceptions.UnsupportedStateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,14 +45,12 @@ public class LeaderElectionImpl implements LeaderElection {
     private KubernetesLockConfiguration lockConfiguration;
     private State currentState = State.REPLICA;
     private ScheduledExecutorService serializedExecutor;
-    private LeaderInfo latestLeaderInfo;
-    private ConfigMap latestConfigMap;
-    private Set<String> latestMembers;
+    private volatile LeaderInfo latestLeaderInfo;
+    private volatile ConfigMap latestConfigMap;
+    private volatile Set<String> latestMembers;
     private List<LeadershipCallback> callbacks;
 
-    public LeaderElectionImpl(KubernetesClient kubernetesClient,
-                              KubernetesLockConfiguration lockConfiguration,
-                              State initialState) {
+    public LeaderElectionImpl(KubernetesClient kubernetesClient, KubernetesLockConfiguration lockConfiguration, State initialState) {
         this.kubernetesClient = kubernetesClient;
         this.lockConfiguration = lockConfiguration;
         this.callbacks = new ArrayList<>();
@@ -65,8 +62,7 @@ public class LeaderElectionImpl implements LeaderElection {
     public void start() {
         if (serializedExecutor == null) {
             if (logger.isDebugEnabled()) {
-                logger.debug("{} Starting leadership election...",
-                             logPrefix());
+                logger.debug("{} Starting leadership election...", logPrefix());
             }
             serializedExecutor = Executors.newSingleThreadScheduledExecutor();
             serializedExecutor.execute(this::refreshStatus);
@@ -75,8 +71,7 @@ public class LeaderElectionImpl implements LeaderElection {
 
     public void stop() {
         if (logger.isDebugEnabled()) {
-            logger.debug("{} Stopping leadership election...",
-                         logPrefix());
+            logger.debug("{} Stopping leadership election...", logPrefix());
         }
 
         if (serializedExecutor != null) {
@@ -102,7 +97,7 @@ public class LeaderElectionImpl implements LeaderElection {
                 refreshStatusLeader();
                 break;
             default:
-                throw new UnsupportedStateException("Unsupported state " + currentState);
+                throw new IllegalStateException("Unsupported state " + currentState);
         }
 
         for (LeadershipCallback callback : callbacks) {
@@ -114,10 +109,9 @@ public class LeaderElectionImpl implements LeaderElection {
      * This pod is currently not leader. It should monitor the leader configuration and try
      * to acquire the leadership if possible.
      */
-    public void refreshStatusNotLeader() {
+    void refreshStatusNotLeader() {
         if (logger.isDebugEnabled()) {
-            logger.debug("{} Pod is not leader, pulling new data from the cluster",
-                         logPrefix());
+            logger.debug("{} Pod is not leader, pulling new data from the cluster", logPrefix());
         }
 
         boolean pulled = lookupNewLeaderInfo();
@@ -147,19 +141,17 @@ public class LeaderElectionImpl implements LeaderElection {
                                 logPrefix());
                 }
             }
-        } else if (!GlobalStatus.isCanBecomeLeader()) {
+        } else if (!GlobalStatus.canBecomeLeader()) {
             // Node is waiting for an initial state to use as starting point
             if (logger.isInfoEnabled()) {
-                logger.info("{} Pod is not initialized yet (waiting snapshot) so cannot try to become leader",
-                            logPrefix());
+                logger.info("{} Pod is not initialized yet (waiting snapshot) so cannot try to become leader", logPrefix());
             }
             rescheduleAfterDelay();
             return;
         } else if (!this.latestLeaderInfo.hasValidLeader()) {
             // There's a previous leader and it's invalid
             if (logger.isInfoEnabled()) {
-                logger.info("{} Leadership has been lost by old owner. Trying to acquire the leadership...",
-                            logPrefix());
+                logger.info("{} Leadership has been lost by old owner. Trying to acquire the leadership...", logPrefix());
             }
             boolean acquired = tryAcquireLeadership();
             if (acquired) {
@@ -194,7 +186,7 @@ public class LeaderElectionImpl implements LeaderElection {
      * This pod has acquired the leadership but it should wait for the old leader
      * to tear down resources before starting the local services.
      */
-    public void refreshStatusBecomingLeader() {
+    void refreshStatusBecomingLeader() {
         // Wait always the same amount of time before becoming the leader
         // Even if the current pod is already leader, we should let a possible old version of the pod to shut down
         long delay = this.lockConfiguration.getLeaseDurationMillis();
@@ -220,10 +212,9 @@ public class LeaderElectionImpl implements LeaderElection {
         this.serializedExecutor.execute(this::refreshStatus);
     }
 
-    public void refreshStatusLeader() {
+    void refreshStatusLeader() {
         if (logger.isDebugEnabled()) {
-            logger.debug("{} Pod should be the leader, pulling new data from the cluster",
-                         logPrefix());
+            logger.debug("{} Pod should be the leader, pulling new data from the cluster", logPrefix());
         }
         boolean pulled = lookupNewLeaderInfo();
         if (!pulled) {
@@ -249,7 +240,7 @@ public class LeaderElectionImpl implements LeaderElection {
         }
     }
 
-    public void rescheduleAfterDelay() {
+    void rescheduleAfterDelay() {
         this.serializedExecutor.schedule(this::refreshStatus,
                                          jitter(this.lockConfiguration.getRetryPeriodMillis(),
                                                 this.lockConfiguration.getJitterFactor()),
@@ -269,9 +260,7 @@ public class LeaderElectionImpl implements LeaderElection {
             logger.warn("{} Unable to retrieve the current ConfigMap {} from Kubernetes",
                         logPrefix(),
                         this.lockConfiguration.getConfigMapName());
-            logger.debug("{} Exception thrown during ConfigMap lookup",
-                         logPrefix(),
-                         e);
+            logger.debug("{} Exception thrown during ConfigMap lookup", logPrefix(), e);
             return false;
         }
 
@@ -280,11 +269,8 @@ public class LeaderElectionImpl implements LeaderElection {
             members = Objects.requireNonNull(pullClusterMembers(),
                                              "Retrieved a null set of members");
         } catch (Exception e) {
-            logger.warn("{} Unable to retrieve the list of cluster members from Kubernetes",
-                        logPrefix());
-            logger.debug("{} Exception thrown during Pod list lookup ",
-                         logPrefix(),
-                         e);
+            logger.warn("{} Unable to retrieve the list of cluster members from Kubernetes", logPrefix());
+            logger.debug("{} Exception thrown during Pod list lookup ", logPrefix(), e);
             return false;
         }
 
@@ -293,7 +279,7 @@ public class LeaderElectionImpl implements LeaderElection {
         return true;
     }
 
-    public boolean tryAcquireLeadership() {
+    boolean tryAcquireLeadership() {
         if (logger.isDebugEnabled()) {
             logger.debug("{} Trying to acquire the leadership...",
                          logPrefix());
@@ -305,15 +291,13 @@ public class LeaderElectionImpl implements LeaderElection {
 
         if (latestLeaderInfoLocal == null || members == null) {
             if (logger.isWarnEnabled()) {
-                logger.warn("{} Unexpected condition. Latest leader info or list of members is empty.",
-                            logPrefix());
+                logger.warn("{} Unexpected condition. Latest leader info or list of members is empty.", logPrefix());
             }
             return false;
         } else if (!members.contains(this.lockConfiguration.getPodName())) {
             if (logger.isWarnEnabled()) {
                 logger.warn("{} The list of cluster members {} does not contain the current Pod. Cannot acquire leadership.",
-                            logPrefix(),
-                            latestLeaderInfoLocal.getMembers());
+                            logPrefix(), latestLeaderInfoLocal.getMembers());
             }
             return false;
         }
@@ -350,9 +334,7 @@ public class LeaderElectionImpl implements LeaderElection {
                 logger.warn("Unable to create the ConfigMap, it may have been created by other cluster members concurrently. " +
                                     "If the problem persists, check if the service account has the right permissions to create it",
                             logPrefix());
-                logger.debug("{} Exception while trying to create the ConfigMap",
-                             logPrefix(),
-                             ex);
+                logger.debug("{} Exception while trying to create the ConfigMap", logPrefix(), ex);
                 return false;
             }
         } else {
@@ -384,11 +366,8 @@ public class LeaderElectionImpl implements LeaderElection {
                                            members);
                     return true;
                 } catch (Exception ex) {
-                    logger.warn("{} Unable to update the lock ConfigMap to set leadership information",
-                                logPrefix());
-                    logger.debug("{} Error received during configmap lock replace",
-                                 logPrefix(),
-                                 ex);
+                    logger.warn("{} Unable to update the lock ConfigMap to set leadership information", logPrefix());
+                    logger.debug("{} Error received during configmap lock replace", logPrefix(), ex);
                     return false;
                 }
             } else {
@@ -403,11 +382,10 @@ public class LeaderElectionImpl implements LeaderElection {
         }
     }
 
-    public void updateLatestLeaderInfo(ConfigMap configMap,
+    void updateLatestLeaderInfo(ConfigMap configMap,
                                        Set<String> members) {
         if (logger.isDebugEnabled()) {
-            logger.debug("{} Updating internal status about the current leader",
-                         logPrefix());
+            logger.debug("{} Updating internal status about the current leader", logPrefix());
         }
         this.latestConfigMap = configMap;
         this.latestMembers = members;
@@ -415,13 +393,11 @@ public class LeaderElectionImpl implements LeaderElection {
                                                                  members,
                                                                  this.lockConfiguration.getGroupName());
         if (logger.isDebugEnabled()) {
-            logger.debug("{} Current leader info: {}",
-                         logPrefix(),
-                         this.latestLeaderInfo);
+            logger.debug("{} Current leader info: {}", logPrefix(), this.latestLeaderInfo);
         }
     }
 
-    public ConfigMap pullConfigMap() {
+    ConfigMap pullConfigMap() {
         return kubernetesClient.configMaps()
                 .inNamespace(this.lockConfiguration.getKubernetesResourcesNamespaceOrDefault(kubernetesClient))
                 .withName(this.lockConfiguration.getConfigMapName())
